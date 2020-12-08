@@ -27,6 +27,7 @@
 *.toc
 *.bcf
 *.run.xml
+*.xdv
 
 # ========== OSX ===============
 .DS_Store
