@@ -33,4 +33,4 @@
     * Test Coverage (nyc + coveralls.io)
     * Travis-CI/Pipeline
 * Deployment auf GKE und Merge in SAP Repo
-* Schluss
+* Schluss / Future Work
