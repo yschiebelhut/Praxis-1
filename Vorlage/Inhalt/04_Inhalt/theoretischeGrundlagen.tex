@@ -1,0 +1,29 @@
+\chapter{Theoretische Grundlagen}
+Zur Bearbeitung dieses Projekts wurden einige Technologien eingesetzt, für die hier zunächst die theoretischen Grundlagen erläutert werden sollen.
+
+\section{Docker}
+Docker ist eine freie Implementierung des Konzepts der Containervirtualisierung. Ein sogenannter Docker Container ist plattformübergreifend lauffähig. Voraussetzung ist lediglich, dass der Docker Daemon auf dem Host-System installiert ist. Damit die Container, wie beschrieben, auf alles großen Betriebssystemen laufen können, setzen sie üblicherweise auf Linux auf. Somit wird unter Windows das \ac{WSL} genutzt, um die Container auszuführen. Dies ist eine schlanke Integration des Linux-Kernels in Windows und erspart den Overhead von herkömmlicher Virtualisierung.
+
+Kennzeichnend für das Konzept von Docker sind die sogenannten Container. Diese stellen eine Zusammenstellung aller Komponenten dar, die eine bestimmte Anwendung zur Ausführung benötigt. Dadurch ist es sehr einfach, eine Applikation schnell und einheitlich auf einem neuen System zu deployen und dabei direkt alle Abhängigkeiten mit zu installieren und richtig zu konfigurieren.
+
+Docker bietet außerdem eine Plattform an, welche Docker Hub genannt wird. Sie bietet eine Möglichkeit, eigene Docker Images hochzuladen, sowie die von anderen Nutzern hochgeladenen Images zu nutzen. Diese können zum Beispiel mit einem einzigen Kommandozeilenbefehl herunter geladen werden und sogar als Basis für neue, eigene Images dienen.
+
+\section{Node.js}
+In den letzten Jahren hat JavaScript in der Web-Entwicklung zunehmend an Bedeutung gewonnen. Node.js stellt eine Möglichkeit dar, wie JavaScript nicht mehr nur clientseitig im Browser ausgeführt werden kann, sondern auch serverseitig. Ein großer Vorteil davon liegt darin, dass Web-Entwickler, die bereits viel mit JavaScript arbeiten und dementsprechend damit vertraut sind, nur noch eine Sprache benötigen, um sowohl Front- als auch Backend zu entwickeln.
+Zudem kann JavaScript asynchron ausgeführt werden. Dies bedeutet, dass ein Web-Server nicht wie traditionell üblich eine Schlange von Anfragen bilden muss und diese nacheinander beantworten, sondern er kann die Anfragen gleichzeitig beantworten.\todo{Fachliche Richtigkeit prüfen und korrigieren}
+
+\subsection{npm-Module}
+Eine weitere nützliche Funktion von Node.js ist der \ac{npm}. Mit ihm können sehr einfach, von der Community erstellte, Bibliotheken installiert und in das Programm eingebunden werden. Auf diese Weise stehen beispielsweise fertige Frameworks für Web-Server, Unit-Tests oder erweiterte Logger zur Verfügung.
+
+Die verwendeten Pakete werden in der \code{package.json} aufgezeichnet. Diese Datei dient zudem als eine Konfigurationsdatei für das Projekt. Dort können unter anderem Daten zum Autor, Lizenzen und Repository hinterlegt werden, sowie Skripte für npm definiert werden (zum Beispiel zum Starten, Testen oder Bauen des Projekts).
+
+\section{Postman}
+
+\section{Kubernetes / Google Cloud Platform}
+
+\section{Git}
+\subsection{GitHub}
+
+\section{Travis-CI}
+
+\section{Jira}

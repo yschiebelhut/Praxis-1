@@ -1,47 +1,16 @@
 \chapter{Einleitung}
 
-\section*{Information bezüglich des Inhaltsverzeichnisses}
-Nachtrag zum Inhaltsverzeichnis: Dieses sollte wenn möglich nur eine Seite lang sein. Unterpunkte können dabei auch ausgelassen werden. Dies kann ganz einfach durchgeführt werden indem die section mit einen Stern geschrieben wird, wie bei der Sektion hier.
+\section{Was ist der ewm-sim?}
+In der vierten industriellen Revolution verändert sich auch der Arbeitsalltag in Lagerhallen. Mobile Roboter finden verstärkt Einsatz, um die Arbeiter zu unterstützen. Das Projekt \ac{EWM} Cloud Robotics der SAP hat das Ziel, ein Roboternetzwerk auf Basis von Google Cloud Robotics an ein SAP \ac{EWM}-System anzubinden. Zu Demonstrationszwecken wird eine Simlationsumgebung erstellt, in der ein virtuelles Warenlager präsentiert werden, in dem Roboter beispielhafte Aufträge bearbeiten. Um nun zu vermeiden, dass ein vollständiges \ac{EWM}-System für solch eine Simulation deployed werden muss, wurde \enquote{ewm-sim} eingeführt. Er stellt einen kleinen Web-Server dar, welcher die Schnittstelle, über die die Roboter ihre Aufträge vom \ac{EWM}-System erhalten, detailgetreu nachbildet.
 
-Des Weiteren solltest du beachten, dass du keine Unterpunkte alleine aufmachen darfst. Laut den DHBW Leitlinien sollte, wenn es einen Punkt 1.1 gibt, auch ein Punkt 1.2 existieren. Weitere Details dazu in den Leitlinien - zur Info: diese Vorlage hält sich aktuell nicht an diese Regelung, sie ist schließlich nur ein Template.
+\section{Kritikpunkte der ursprünglichen Implementierung}
+Wie bereits erwähnt, soll der ewm-sim die Schnittstelle eines \ac{EWM}-Systems nachbilden. Hierbei handelt es sich um einen OData-Service. Für die Implementierung wurde hier auf den bestehenden MockServer von SAPUI5 gesetzt. Dieser ist jedoch zur Frontend- und nicht zur Backend-Entwicklung vorgesehen. Leider bringt er das Problem mit sich, dass er sich nur innerhalb einer SAPUI5-App verwenden lässt, welche wiederum in einem Browser läuft. In der \autoref{fig:ewm-sim-v1} ist der Aufbau des bisherigen ewm-sim veranschaulicht. Er stellt eine Art gekapseltes System dar. Die Anfragen, die gegen den nach außen hin geöffneten WebServer geschickt werden, landen über den WebSocket Server bei einer headless Instanz von Google Chrome, in welchem wiederum die SAPUI5-App ausgeführt wird. Diese ist mit dem SAPUI5 Mockserver verknüpft, welcher die Daten, die er bereitstellen soll, aus json Dateien einliest.
 
-\section{Grobe Struktur der Arbeit}
-Alle Details zur Struktur findest du in den Leitlinien ab Seite 21. Nachfolgend ist nur die verkürze Version mit allen wichtigen Punkten angegeben.
+Wie gut zu erkennen ist, bringt diese Implementierung einen großen Overhead und mögliche Fehlerquellen mit sich. Ziel des in dieser Praxisarbeit behandelten Projekts soll es sein, das Konzept des ewm-sim zu optimieren und diesen neu zu implementieren.
 
-\subsection{Einleitung - was gibt es zu beachten?}
-Die Einleitung sollte folgende Punkte beinhalten:
-\begin{itemize}
-\item \textbf{Gegenstand und Ziele der Arbeit \& Aufgabenbeschreibung, Einführung in Thema, Stand der Technik \& Forschung, Motivation der Aufgabenstellung \& Vorausblick}
-\item Ausgangspunkt der Arbeit umreisen
-\item Hinführung zur Problemstellung + Interesse des Lesers wecken
-\item Allgemeine Einleitung ins Thema (keine Unternehmens-, Produktbeschreibungen oder Organigramme!)
-\item Fragestellung präsentieren, Motivation erläutern
-\item Randbedingungen und Betrachtungsgrenzen aufzeigen
-\item Stand der Technik und aktuelle Lösungsfindung beschreiben, Vor- und Nachteile bisheriger Lösung anhand von Literatur darlegen
-\end{itemize}
-
-\subsection{Hauptteil - zeige was du kannst!}
-Folgende Punkte kannst du in deinen Hauptteil einarbeiten:
-\begin{itemize}
-\item \textbf{Anforderungsdefinition, Anforderungsanalyse, Lösungsgenerierung, Lösungsbewertung, Umsetzung) in sinnvollen Gliederungspunkten}
-\item Gewähltes Verfahren oder bestimmter Lösungsweg muss begründet werden
-\item Bei Versuchen (nicht alle müssen genannt werden) müssen Voraussetzungen, Vernachlässigungen sowie Anordnung, Leistungsfähigkeit und Messgenauigkeit der einzelnen Versuchsanordnung angeben werden
-\item Ergebnisse der Arbeit ausführlich diskutieren, Vergleiche mit Anschauungen und Erfahrungen vergleichen
-\item Ziel der Arbeit: Eindeutige Folgerungen und Richtlinien für die Praxis
-\end{itemize}
-
-\subsection{Schluss - das Ziel ist nahe...}
-Nachfolgende Aspekte können in den Schluss eingearbeitet werden:
-\begin{itemize}
-\item \textbf{Zusammenfassung und Ausblick}
-\item Aufgabenstellung, Vorgehensweise, sowie wesentliche Ergebnisse kurz/präzise darstellen
-\item Zusammenfassung eigenständig verständlich
-\item Länge ca. 1-1,5 Seiten (Problem, Ziele, Vorgehensweise, Ergebnisse und Ausblick)
-\end{itemize}
-
-\subsection{Sonstige Tipps}
-Es ist hilfreich, sich Notizen in das Dokument zu schreiben.
-\LaTeX Kommentare haben jedoch den Nachteil, dass sie in der PDF nicht erscheinen.
-Einfacher Text wird auch leicht überlesen.
-Deshalb wird in dieser Vorlage das Package \code{todonotes} eingebunden, welches Notizen in dem Dokument sichtbar macht.\todo{So wie hier}
-Auf der rechten Seite siehst du ein Beispiel.
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{Bilder/ewm-sim_v1_4x.pdf}
+    \caption{Aufbau des ewm-sim v1}
+    \label{fig:ewm-sim-v1}
+\end{figure}
