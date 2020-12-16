@@ -1,5 +1,5 @@
 * Einleitung
-    * (Was ist der ewm-sim?)
+    * Was ist der ewm-sim?
     * (Wofür wird er eingesetzt?)
     * (Warum soll er neu gebaut werden?)
 * Theoretische Grundlagen
@@ -32,5 +32,6 @@
         * (Schreiben von neuen)
     * Test Coverage (nyc + coveralls.io)
     * Travis-CI/Pipeline
+    * Performance Test (und Vergleich mit ewm-sim v1)
 * Deployment auf GKE und Merge in SAP Repo
 * Schluss / Future Work
