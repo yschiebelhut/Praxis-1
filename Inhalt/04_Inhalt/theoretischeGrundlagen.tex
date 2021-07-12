@@ -1,34 +1,73 @@
 \chapter{Theoretische Grundlagen}
-Zur Bearbeitung dieses Projekts wurden einige Technologien eingesetzt, für die hier zunächst die theoretischen Grundlagen erläutert werden sollen.
+Zur Bearbeitung dieses Projekts wurden einige Technologien eingesetzt, für die hier zunächst Vor- und Nachteile sowie theoretische Grundlagen aufgeführt werden sollen.
+Anhand dessen soll die Entscheidung für die entsprechenden Technologien nachvollziehbar dargelegt werden.
 
 \section{Docker}
-Docker ist eine freie Implementierung des Konzepts der Containervirtualisierung. Ein sogenannter Docker Container ist plattformübergreifend lauffähig. Voraussetzung ist lediglich, dass der Docker Daemon auf dem Host-System installiert ist. Damit die Container, wie beschrieben, auf alles großen Betriebssystemen laufen können, setzen sie üblicherweise auf Linux auf. Somit wird unter Windows das \ac{WSL} genutzt, um die Container auszuführen. Dies ist eine schlanke Integration des Linux-Kernels in Windows und erspart den Overhead von herkömmlicher Virtualisierung.
+Docker ist eine freie Implementierung des Konzepts der Containervirtualisierung.
+Ein sogenannter Docker Container ist plattformübergreifend lauffähig.
+Voraussetzung ist lediglich, dass der Docker Daemon auf dem Host-System installiert ist und im Hintergrund ausgeführt wird.
+Damit die Container, wie beschrieben, auf alles großen Betriebssystemen laufen können, setzen sie üblicherweise auf Linux auf.
+Somit wird unter Windows das \ac{WSL} genutzt, um die Container auszuführen.
+Dies ist eine schlanke Integration des Linux-Kernels in das Windows-Betriebssystem, welche durch Optimierung und Reduktion auf essenzielle Bestandteile den deutlich größeren Overhead von herkömmlicher Virtualisierung erspart.
 
-Kennzeichnend für das Konzept von Docker sind die sogenannten Container. Diese stellen eine Zusammenstellung aller Komponenten dar, die eine bestimmte Anwendung zur Ausführung benötigt. Dadurch ist es sehr einfach, eine Applikation schnell und einheitlich auf einem neuen System zu deployen und dabei direkt alle Abhängigkeiten mit zu installieren und richtig zu konfigurieren.
+Kennzeichnend für das Konzept von Docker sind die sogenannten Container.
+Diese stellen eine vollständige Zusammenstellung aller Komponenten dar, die eine bestimmte Anwendung zur Ausführung benötigt.
+Dadurch ist es sehr einfach, eine Applikation schnell und einheitlich auf einem neuen System zu deployen und dabei direkt alle Abhängigkeiten mitzuinstallieren und richtig zu konfigurieren.
 
-Docker bietet außerdem eine Plattform an, welche Docker Hub genannt wird. Sie bietet eine Möglichkeit, eigene Docker Images hochzuladen, sowie die von anderen Nutzern hochgeladenen Images zu nutzen. Diese können zum Beispiel mit einem einzigen Kommandozeilenbefehl herunter geladen werden und sogar als Basis für neue, eigene Images dienen.
+Docker bietet außerdem eine \enquote{Docker Hub} genannte Plattform an.
+Sie bietet eine Möglichkeit, eigene Container Images (also Systemabbilder/Bauanleitungen für eine bestimmte Container-Umgebung) hochzuladen, sowie die von anderen Nutzern hochgeladenen Images zu nutzen.
+Diese können zum Beispiel mit einem einzigen Kommandozeilenbefehl heruntergeladen und deployed werden. Sogar als Basis für neue, eigene Images können Images von Docker Hub verwendet werden.
+
+Die angestrebte Anwendung als Docker Container zu konzipieren ist neben den oben aufgezählten Vorteilen auch vor allem deshalb naheliegend, weil die erste Version des \ac{ewm-sim} bereits in dieser Form bereitgestellt wurde.
+Somit kann bei entsprechender Umsetzung eine identische oder zumindest sehr ähnliche Schnittstelle zur Anbindung an die anderen Softwarekomponenten des Projektes genutzt werden und Umweltfaktoren, die einen reibungslosen Betrieb verhindern würden, sind von vorneherein ausgeschlossen.
 
 \section{Node.js}
-In den letzten Jahren hat JavaScript in der Web-Entwicklung zunehmend an Bedeutung gewonnen. Node.js stellt eine Möglichkeit dar, wie JavaScript nicht mehr nur clientseitig im Browser ausgeführt werden kann, sondern auch serverseitig. Ein großer Vorteil davon liegt darin, dass Web-Entwickler, die bereits viel mit JavaScript arbeiten und dementsprechend damit vertraut sind, nur noch eine Sprache benötigen, um sowohl Front- als auch Backend zu entwickeln.
-Zudem kann JavaScript asynchron ausgeführt werden. Dies bedeutet, dass ein Web-Server nicht wie traditionell üblich eine Schlange von Anfragen bilden muss und diese nacheinander beantworten, sondern er kann die Anfragen gleichzeitig beantworten.\todo{Fachliche Richtigkeit prüfen und korrigieren}
+Seit der ursprünglichen Einführung im Jahre 1995 hat die interpretierte Skriptsprache \enquote{JavaScript} rasch an Beliebtheit und Bedeutung gewonnen.
+Heutzutage ist sie aus der Web-Entwicklung nicht mehr wegzudenken.
+Node.js stellt eine Möglichkeit dar, mithilfe derer JavaScript nicht mehr nur clientseitig im Browser, sondern auch serverseitig ausgeführt werden kann.
+Ein großer Vorteil davon liegt darin, dass Web-Entwickler, die bereits viel mit JavaScript arbeiten und dementsprechend damit vertraut sind, nur noch eine Sprache benötigen, um sowohl Frontend als auch Backend zu entwickeln.
+Zudem ermöglicht Node.js die parallelisierte Ausführung von Code.
+Dies bedeutet, dass ein Web-Server nicht wie traditionell üblich eine Schlange von Anfragen bilden und diese nacheinander beantworten muss, sondern er die Anfragen stattdessen gleichzeitig beantworten kann.
 
-\subsection{npm-Module}
-Eine weitere nützliche Funktion von Node.js ist der \ac{npm}. Mit ihm können sehr einfach, von der Community erstellte, Bibliotheken installiert und in das Programm eingebunden werden. Auf diese Weise stehen beispielsweise fertige Frameworks für Web-Server, Unit-Tests oder erweiterte Logger zur Verfügung.
+\paragraph{\acs{npm}-Module}
+Eine weitere nützliche Funktionalität von Node.js ist der \ac{npm}.
+Mit ihm können sehr einfach von der Community erstellte Bibliotheken installiert und in ein Programm eingebunden werden.
+Auf diese Weise stehen beispielsweise fertige Frameworks für Web-Server, Unit-Tests oder erweiterte Logger zur Verfügung.
 
-Die verwendeten Pakete werden in der \code{package.json} aufgezeichnet. Diese Datei dient zudem als eine Konfigurationsdatei für das Projekt. Dort können unter anderem Daten zum Autor, Lizenzen und Repository hinterlegt werden, sowie Skripte für npm definiert werden (zum Beispiel zum Starten, Testen oder Bauen des Projekts).
+Die verwendeten Pakete werden in der \code{package.json} aufgezeichnet.
+Diese Datei dient zudem als eine Konfigurationsdatei für das Projekt.
+Dort können unter anderem Daten zum Autor, Lizenzen und Repository hinterlegt werden, sowie Skripte für \ac{npm} definiert werden (zum Beispiel zum Starten, Testen oder Bauen des Projekts).
 
 \section{Postman}
-Bei der Entwicklung eines Web-Servers ist es hilfreich, manuell \ac{HTTP}-Requests an diesen schicken zu können. Ganz grundlegende Anfragen können theoretisch schon durch einen Web-Browser abgesetzt werden, diese stoßen jedoch schnell an ihre Grenzen. Deshalb bietet sich das Programm Postman an. Es bietet eine übersichtliche Oberfläche, um die einzelnen Eigenschaften einer \ac{HTTP}-Request zu konfigurieren und ermöglicht es auch, diese zu speichern. Mit Postman ist es möglich, jede Art von Anfrage an einen Server auszulösen und diese für wiederholten Gebrauch in sogenannten \enquote{Collections} zu sortieren, welche sich auch als \ac{JSON}-Datei exportieren lassen.
+Bei der Entwicklung eines Web-Servers ist es hilfreich, manuell \ac{HTTP}-Requests an diesen schicken zu können.
+Ganz grundlegende Anfragen können theoretisch schon durch einen Web-Browser abgesetzt werden, diese stoßen jedoch schnell an ihre Grenzen.
+Deshalb bietet sich das Programm Postman an. Es bietet eine übersichtliche Oberfläche, um die einzelnen Eigenschaften einer \ac{HTTP}-Request zu konfigurieren und ermöglicht es auch, diese zu speichern.
+Mit Postman ist es möglich, jede Art von Anfrage an einen Server auszulösen und diese für wiederholten Gebrauch in sogenannten \enquote{Collections} zu sortieren, welche sich auch als \ac{JSON}-Datei exportieren lassen.
 
 \section{Kubernetes / Google Cloud Platform}
 
 \section{Git}
-Git ist ein quelloffenes Tool zur Versionsverwaltung, welches ursprünglich von Linus Torvalds zur Entwicklung des Linux-Kernels geschrieben wurde. Die Bedienung erfolgt in der Regel über die Kommandozeile. Dateien werden in sogenannten Repositories verwaltet, welchem sie durch einen \enquote{Commit} hinzugefügt oder aktualisiert werden. In einem Repository kann es zudem beliebig viele \enquote{Branches} geben, zwischen denen flexibel gewechselt werden kann. Die Dateien eines Branches sind unabhängig, d.h. es gibt zum Beispiel einen Hauptbranch, auf dem der stabile Stand des Codes geführt wird und einen, auf dem ein neues Feature entwickelt wird. Branches können durch \enquote{mergen}, weitestgehend automatisch, ineinander überführt werden.
+Git ist ein quelloffenes Tool zur Versionsverwaltung, welches ursprünglich von Linus Torvalds zur Entwicklung des Linux-Kernels geschrieben wurde.
+Die Bedienung erfolgt in der Regel über die Kommandozeile.
+Dateien werden in sogenannten Repositories verwaltet, welchem sie durch einen \enquote{Commit} hinzugefügt oder aktualisiert werden.
+In einem Repository kann es zudem beliebig viele \enquote{Branches} geben, zwischen denen flexibel gewechselt werden kann.
+Die Dateien eines Branches sind unabhängig, d.h. es gibt zum Beispiel einen Hauptbranch, auf dem der stabile Stand des Codes geführt wird und einen, auf dem ein neues Feature entwickelt wird.
+Branches können durch \enquote{mergen}, weitestgehend automatisch, ineinander überführt werden.
 \subsection{GitHub}
-Eine große Stärke von Git ist die Möglichkeit zur einfachen Kollaboration. Hierfür muss ein Repository auf einem Server liegen, von dem aktuelle Änderungen auf den lokalen Rechner heruntergeladen (pull) oder veröffentlicht (push) werden können. GitHub ist einer der größten Anbieter für das Hosten von Git-Repositories und bietet auf der Website noch zahlreiche weitere Möglichkeiten zum Management und der Dokumentation von Projekten, wie zum Beispiel ein in das Projekt integriertes Wiki.
+Eine große Stärke von Git ist die Möglichkeit zur einfachen Kollaboration.
+Hierfür muss ein Repository auf einem Server liegen, von dem aktuelle Änderungen auf den lokalen Rechner heruntergeladen (pull) oder veröffentlicht (push) werden können.
+GitHub ist einer der größten Anbieter für das Hosten von Git-Repositories und bietet auf der Website noch zahlreiche weitere Möglichkeiten zum Management und der Dokumentation von Projekten, wie zum Beispiel ein in das Projekt integriertes Wiki.
 
 \section{Travis-CI}
-In der professionellen Software-Entwicklung ist es üblich, automatisierte Tests für den Code zu schreiben. Das Tool Travis-CI ist ein Dienst, der automatisch aktiv wird, wenn beispielsweise neuer Code auf einem GitHub-Repository hochgeladen wird. In einer Konfigurationsdatei, die im Projektverzeichnis liegt, können alle Randbedingungen (wie Programmiersprache und Betriebssystem) sowie der genaue Ablauf des Tests festgelegt werden. Auch komplexere Abläufe, wie mehrschrittige Builds oder parallelisierte Operationen, können mit Travis-CI umgesetzt werden.
+In der professionellen Software-Entwicklung ist es üblich, automatisierte Tests für den Code zu schreiben.
+Das Tool Travis-CI ist ein Dienst, der automatisch aktiv wird, wenn beispielsweise neuer Code auf einem GitHub-Repository hochgeladen wird.
+In einer Konfigurationsdatei, die im Projektverzeichnis liegt, können alle Randbedingungen (wie Programmiersprache und Betriebssystem) sowie der genaue Ablauf des Tests festgelegt werden.
+Auch komplexere Abläufe, wie mehrschrittige Builds oder parallelisierte Operationen, können mit Travis-CI umgesetzt werden.
 
 \section{Jira}
-Jira ist ein Tool, das in der agilen Projektmanagement-Methode \enquote{Scrum} Anwendung findet. Dort können Backlog-Items mit dazugehörigen Sub-Tasks definiert und in Sprints verwaltet werden. In einem aktiven Sprint können mit wenigen Klicks Aufgaben einem Teammitglied zugewiesen oder neue Sub-Tasks erstellt werden. Elemente eines Sprints können bequem per Drag and Drop zwischen Spalten hin und her geschoben werden, welche den aktuellen Status anzeigen.
+Jira ist ein Tool, das in der agilen Projektmanagement-Methode \enquote{Scrum} Anwendung findet.
+Dort können Backlog-Items mit dazugehörigen Sub-Tasks definiert und in Sprints verwaltet werden.
+In einem aktiven Sprint können mit wenigen Klicks Aufgaben einem Teammitglied zugewiesen oder neue Sub-Tasks erstellt werden.
+Elemente eines Sprints können bequem per Drag and Drop zwischen Spalten hin und her geschoben werden, welche den aktuellen Status anzeigen.
+
+\section{Visual Studio Code}
