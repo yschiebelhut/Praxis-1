@@ -1,3 +1,21 @@
 \chapter{Vorbereitung}
+Die Abteilung, in der die Entwicklung von \ac{EWM}-Cloud-Robotics vorangetrieben wird, legt einen starken Fokus auf innovative Entwicklung.
 
 \section{Analyse der bisherigen ewm-sim Implementierung}
+
+\section{Einarbeitung in Basiskomponenten}
+Docker, Hello World, Dockerfile
+
+Node.js, empfohlene Sprache, eventuelle Alternativen (gibt nicht viele, einfach optimal für diese Aufgabe $\rightarrow$ serverseitigen Code)
+
+\section{Suche nach einer geeigneten Basis}
+Kernaufgabe des \ac{ewm-sim} ist die Simulation der OData-Schnittstelle eines vollständigen SAP-EWM-Systems.
+Grundsätzlich existieren viele Wege, über die dies erreicht werden kann.
+OData ist ein HTTP-basiertes Protokoll, welches eine offene Spezifikation darstellt.
+Also solche bieten sich grundsätzlich zwei mögliche Vorgehensweisen.
+Zum einen bestünde grundsätzlich die Möglichkeit, von Grund auf einen neuen Service zu implementieren, bei dem für sämtliche Requests, die an den Server gestellt werden können, das entsprechende Verhalten und mögliche Antworten abgedeckt werden müssen.
+Auf diese Weise wären der Entwicklung die größtmöglichen Freiheiten eingeräumt, brächte allerdings auf der anderen Seite auch eine Reihe von potenziellen Problemen und vermeidbaren Fehlern mit sich, da der OData Standard relativ umfangreich ist.
+Hinzu kommt, dass die Erfahrung in dieser ersten Praxisphase noch stark eingeschränkt war, weshalb dies wahrscheinlich zu einer Überforderung geführt hätte, das Projekt vermutlich nicht in der gesteckten Zeit von zwei Monaten vollständig umsetzbar gewesen wäre und sich somit insgesamt ein alternativer Ansatz empfiehlt.
+
+Dieser alternative Ansatz besteht aus vorgefertigten Modulen, die sich genau der Aufgabe widmen, eine einfache OData-Schnittstelle nachzubilden.
+Einige dieser Module finden sich beispielsweise in den \ac{npm}-Repositories, wobei sie je nach Variante einen stark variierenden Funktionsumfang bieten.

@@ -24,10 +24,26 @@ Somit kann bei entsprechender Umsetzung eine identische oder zumindest sehr ähn
 
 \section{Kubernetes}
 Wie in \ref{docker} beschrieben, können mithilfe von Containern leicht Applikationen in einer neuen Umgebung eingerichtet werden.
-Kubernetes stellt eine quelloffene Option zur erleichterten und automatisierten Verwaltung von containerisierten Services dar.\todo{weiterer Inhalt}
+Kubernetes stellt eine quelloffene Option zur erleichterten und automatisierten Verwaltung von containerisierten Services dar.
+Dabei wird von Kubernetes ein deklarativer Ansatz verfolgt.
+Das bedeutet: Der Nutzer beschreibt den gewünschten Zustand -- zum Beispiel über Konfigurationsdateien oder die Konsole -- und Kubernetes ermittelt selbstständig die Schritte, die zur Erreichung und Aufrechterhaltung notwendig sind.
+Mittels Kubernetes ist es auch möglich, Dienste dynamisch zu skalieren (\dash es werden abhängig von der aktuellen Anzahl der Nutzer eines Dienstes die Ressourcen einer Anwendung entweder erhöht oder wenn möglich gespart) sowie Lastausgleich und Redundanz zwischen verschiedenen Instanzen desselben Services herzustellen.~\cite{Bloß2019, wasistk8s}
+
+Instanzen eines Kubernetessystem werden auch als Cluster bezeichnet.
+Ein Cluster besteht aus beliebig vielen Nodes.
+Letztere können dabei beliebige Maschinen sein (in der Regel virtuelle Maschinen oder physische Server) auf denen die eigentlichen Anwendungen laufen.
+Die Interaktion mit einem Cluster findet über den sogenannten \emph{Kubernetes Master} statt.
+Er stellt eine zentrale Verwaltungsstelle dar, mit den Nodes wird praktisch nie direkt interagiert.~\cite{k8skonzepte}
 
 \paragraph{\ac{GKE}}
-\todo{mit Inhalt füllen}
+Kubernetes kann theoretisch auf jedem Heimcomputer installiert und betrieben werden.
+Primär findet es jedoch Anwendung im Cloud Computing.
+Hierbei können fertige Kubernetes Cluster gemietet werden.
+Dies geschieht normalerweise in Form von virtuellen Servern, deren Spezifikationen nach den eigenen Bedürfnissen gewählt werden können, ohne dass selbst Hardware angeschafft werden muss.
+Somit ist es möglich, auch für kurze Projekte eine größere Infrastruktur zu deployen oder bei Bedarf und mithilfe der Skalierungsmöglichkeit von Kubernetes mit wenigen Klicks die Ressourcen einer Anwendung beziehungsweise eines Clusters anzupassen.
+Weiterhin ist es vorteilhaft, dass nur für die tatsächlich genutzte Rechenzeit und -last gezahlt werden muss.
+Google ist mit \ac{GKE} einer der größeren Anbieter von Kubernetes Clustern.~\cite{gke}
+Die Entwicklungsabteilung, im Rahmen derer dieses Projekt entwickelt wird, nutzt \ac{GKE}, um dort dynamisch Testumgebungen aufbauen zu können.
 
 \section{Node.js}
 Seit der ursprünglichen Einführung im Jahre 1995 hat die interpretierte Skriptsprache \enquote{JavaScript} rasch an Beliebtheit und Bedeutung gewonnen.
