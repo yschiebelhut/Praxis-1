@@ -1,0 +1,13 @@
+{
+	"name": "hello_world_docker",
+	"version": "1.0.0",
+	"description": "Node.js hello-world project on Docker",
+	"author": "Yannik Schiebelhut <y.schiebelhut@sap.com>",
+	"main": "hello-world.js",
+	"scripts": {
+		"start": "node hello-world.js"
+	},
+	"dependencies": {
+		"express": "^4.16.1"
+	}
+}

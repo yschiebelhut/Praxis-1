@@ -3,7 +3,42 @@ Die Abteilung, in der die Entwicklung von \ac{EWM}-Cloud-Robotics vorangetrieben
 
 \section{Analyse der bisherigen ewm-sim Implementierung}
 
-\section{Einarbeitung in Basiskomponenten}
+\section{Einarbeitung in und Installation der Basiskomponenten}
+Um sich in der IT-Entwicklung mit neuen Technologien vertraut zu machen und die lokale Installation der Entwicklungsumgebung flüchtig auf korrekte Funktion zu überprüfen, empfiehlt sich in der Regel immer ein sogenanntes \enquote{Hello-World-Projekt}.
+Node.js und Docker stellen in dieser Hinsicht keine Ausnahmen dar und bieten beide eigenständige, geführte Einleitungen an, die den Einsteiger von der Installation bis zu den ersten sichtbaren Lebenszeichen begleiten.
+Beide Tools werden auch gerne in Kombination miteinander eingesetzt.
+Dadurch existieren praktischerweise sogar (ebenfalls von beiden Seiten aus) Anleitungen, wie ein Hello World Node.js-Server in einen Docker verpackt werden kann.
+
+\paragraph{Node.js}
+Für Node.js existieren streng genommen verschieden Ansätze für ein Hello World.
+Der einfachste bestünde darin, die Grußbotschaft auf der Konsole auszugeben.
+Da Node.js jedoch primär für den Einsatz als Webserver vorgesehen ist und die Erstellung eines Webservices auch Ziel dieser Praxisphase ist, wird hier auch das Hello World als Antwort auf eine \ac{HTTP}-Request implementiert (\autoref{code:hello-world.js}).
+Hierzu wird zunächst in der ersten Zeile das entsprechende \ac{HTTP}-Modul aus der Standardbibliothek von Node.js geladen.
+Anschließend werden Hostname und Port gesetzt, unter denen der Service erreichbar sein wird.
+Als Hostname wird hier \emph{127.0.0.1} in Verbindung mit Port 3000 gewählt.
+Die angegebene \ac{IP}-Adresse steht für den lokalen Rechner.
+Üblicherweise würde für einen \ac{HTTP}-Webservice der Port 80 gewählt werden.
+Dies bringt jedoch den Nachteil mit sich, dass die Anwendung in diesem Falle nur mit Administratorrechten ausgeführt werden kann, weshalb häufig auf alternative Ports zurückgegriffen wird.
+Als Nächstes wird in Zeile 6 folgende der Server initialisiert.
+Mit dem hier vorliegenden Aufruf der Methode \emph{createServer} wird ein Server erstellt, der beim Aufruf jedes Pfades die folgende Callback-Funktion ausführt.
+Diese erhält als Parameter eine Request (eingehende Daten vom anfragenden Client) und eine Response (Antwort, die der Server an den Client zurücksendet).
+In den folgenden Zeilen wird zunächst der Statuscode und Inhaltstyp (hier der Einfachheit halber Klartext) der Response gesetzt und anschließend in Zeile 9 noch ihr Text \enquote{Hello, world!} festgelegt.
+Mit dem Methodenaufruf in Zeile 12 wird der Server nun gestartet.
+Abschließend wird noch in Zeile 13 die Statusmeldung geloggt, dass der Server erfolgreich gestartet wurde und nun unter der Adresse \emph{http://127.0.0.1:3000/} zu erreichen ist.
+(Die Festlegung des Inhalts dieser Statusmeldung erfolgt dynamisch und passt sich den in Zeile 3 und 4 getroffenen Einstellungen an.)
+\lstinputlisting[
+	label=code:hello-world.js,
+	% language=JavaScript,
+	caption=Hello-World-Server in Node.js,
+	captionpos=b
+]{Quellcode/hello-world.js}
+
+
+\paragraph{Docker}
+
+
+\paragraph{.dockerignore}
+
 Docker, Hello World, Dockerfile
 
 Node.js, empfohlene Sprache, eventuelle Alternativen (gibt nicht viele, einfach optimal für diese Aufgabe $\rightarrow$ serverseitigen Code)
@@ -17,5 +52,33 @@ Zum einen bestünde grundsätzlich die Möglichkeit, von Grund auf einen neuen S
 Auf diese Weise wären der Entwicklung die größtmöglichen Freiheiten eingeräumt, brächte allerdings auf der anderen Seite auch eine Reihe von potenziellen Problemen und vermeidbaren Fehlern mit sich, da der OData Standard relativ umfangreich ist.
 Hinzu kommt, dass die Erfahrung in dieser ersten Praxisphase noch stark eingeschränkt war, weshalb dies wahrscheinlich zu einer Überforderung geführt hätte, das Projekt vermutlich nicht in der gesteckten Zeit von zwei Monaten vollständig umsetzbar gewesen wäre und sich somit insgesamt ein alternativer Ansatz empfiehlt.
 
-Dieser alternative Ansatz besteht aus vorgefertigten Modulen, die sich genau der Aufgabe widmen, eine einfache OData-Schnittstelle nachzubilden.
+Diese zweite Möglichkeit besteht in vorgefertigten Modulen, die sich speziell der Aufgabe widmen, eine einfache OData-Schnittstelle nachzubilden.
 Einige dieser Module finden sich beispielsweise in den \ac{npm}-Repositories, wobei sie je nach Variante einen stark variierenden Funktionsumfang bieten.
+Da OData ein klar definierter Standard ist, waren die Kernfunktionalitäten dieser Module sehr ähnlich aufgebaut.
+Unterschieden haben sie sich vor allem Hinsichtlich der Speicherung abrufbaren und empfangenen Daten.
+Das Format, aus welchem die Services ihre Startdaten lesen, war in allen Fällen \ac{JSON}.
+Dies bietet sich vor allem aus dem Grund an, dass es für Menschen leicht les- und schreibbar ist, jedoch auch von Maschinen aufgrund seiner Strukturierung gut verarbeitet werden kann.
+Der eben angesprochene Unterschied bestand nun jedoch darin, dass nur wenige der verfügbaren Module in der Lage waren, ihre empfangenen Daten -- welche zur Laufzeit zunächst im Arbeitsspeicher abgelegt werden -- bei der Beendung des Programms persistent zurück in die Quelldateien zu schreiben, damit sich der Server beim nächsten Programmstart wieder in genau dem Zustand befindet, in dem man zuletzt mit ihm gearbeitet hat.
+Würde die Implementierung des \ac{ewm-sim} dies beherrschen, so wäre sie schon sehr dicht an einem tatsächlichen \ac{EWM}-System, bei dem die Daten natürlich direkt aus einer Datenbank gelesen und auch dort wieder gespeichert werden.
+Auf der anderen Seite entstünden auch Vorteile aus einer flüchtigen Speicherung der Arbeitsdaten.
+Da der \ac{ewm-sim} nicht nur zu Kundendemonstrationen verwendet werden soll, sondern auch in der Entwicklung Einsatz finden wird, kann es dort -- etwa für die Fehlersuche -- sehr hilfreich sein, wenn das Serverprogramm bei jedem Start exakt dieselbe Ausgangssituation repräsentiert.
+Somit kann durch Veränderung der \ac{JSON}-Dateien auch gezielt ein spezieller Startzustand erzeugt und fixiert werden.
+
+Weiterhin spielen für den \ac{ewm-sim} sogenannte Function Imports eine entscheidende Rolle.
+Der Kern der OData-Spezifikation umfasst in erster Linie den Abruf sowie die Aktualisierung einzelner Datensätze (Entities) welche wiederum Teil sogenannter Entitysets sind.
+Diese Entitysets können ebenfalls angesprochen, gefiltert und hinsichtlich bestimmter Eigenschaften selektiert werden.
+Function Imports bieten nun die Möglichkeit, darüber hinaus spezialisierte Anfragen an den Server zu schicken.
+So existiert exemplarisch im \ac{ewm-sim} eine Funktion \enquote{GetNewRobotWarehouseOrder}, mittels derer sich ein Roboter eine neue \ac{who} zuweisen lassen kann.
+Auf Function Imports kann in einer Simulation keinesfalls verzichtet werden, da diese, wie am obigen Beispiel anschaulich zu erkennen, für essenzielle Funktionen benötigt werden.
+Die verfügbaren Module mussten somit zunächst noch alle auf die Möglichkeit untersucht werden, ob sie die Einrichtung von angepassten Function Imports unterstützen.
+
+Im Laufe der Tests präsentierten sich zwei Kandidaten, die zwar sehr angenehm über ein Kommandozeileninterface konfiguriert werden konnten und sogar persistente Speicherung unterstützten, jedoch erfüllte leider keines von beiden die Anforderung der Function Imports.
+Von den betrachteten Möglichkeiten konnten diese lediglich im SAP eigenen \emph{Mockserver} eingerichtet werden.
+
+\paragraph{\href{https://github.com/ArnaudBuchholz/node-ui5}{node-ui5}}
+Nun kann der Mockserver allerdings, wie in der Einleitung bereits erwähnt, nur in einer \emph{SAPUI5}-Umgebung ausgeführt werden.
+Mit dem \ac{npm}-Modul \emph{node-ui5} wurde eine Lösung, wie SAPUI5-Tools nicht nur clientseitig, sondern auch auf Node.js-Servern genutzt werden können, bereits vor einiger Zeit von dem kanadischen SAP-Entwickler Arnaud Buchholz entwickelt.
+Grundlegend funktioniert dieses Modul ziemlich gut.
+Leider bringt es jedoch übliche Probleme solcher in Eigenregie entwickelter \enquote{Ein-Mann-Projekte} mit sich: Die Dokumentation ist nicht besonders ausführlich und zumeist sind andere Arbeitsaufgaben wichtiger, als das Aufspüren und beheben kleinerer Probleme.
+Diese Probleme stellten sich, wie zu erwarten, im Laufe des Projekts gelegentlich als kleinere oder größere Schwierigkeiten dar.
+Da dieses Modul jedoch das einig aktuell verfügbare ist, mit dem alle Anforderungen an den Mockserver erfüllt und eine deutliche Verbesserung der Performance erreicht werden können und die eigene Neuerstellung noch deutlich schwieriger geworden und weit über die Möglichkeiten dieser Praxisphase hinaus gegangen wären, wurde es trotzdem als Ausgangspunkt für dieses Projekt gewählt.
