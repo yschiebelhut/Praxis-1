@@ -2,8 +2,10 @@
 Die Abteilung, in der die Entwicklung von \ac{EWM}-Cloud-Robotics vorangetrieben wird, legt einen starken Fokus auf innovative Entwicklung.
 
 \section{Analyse der bisherigen ewm-sim Implementierung}
+\todo{braucht es das hier überhaupt noch?}
 
 \section{Einarbeitung in und Installation der Basiskomponenten}
+\label{sec:einarbeitung}
 Um sich in der IT-Entwicklung mit neuen Technologien vertraut zu machen und die lokale Installation der Entwicklungsumgebung flüchtig auf korrekte Funktion zu überprüfen, empfiehlt sich in der Regel immer ein sogenanntes \enquote{Hello-World-Projekt}.
 Node.js und Docker stellen in dieser Hinsicht keine Ausnahmen dar und bieten beide eigenständige, geführte Einleitungen an, die den Einsteiger von der Installation bis zu den ersten sichtbaren Lebenszeichen begleiten.
 Beide Tools werden auch gerne in Kombination miteinander eingesetzt.
@@ -35,13 +37,41 @@ Abschließend wird noch in Zeile 13 die Statusmeldung geloggt, dass der Server e
 
 
 \paragraph{Docker}
+Nun gilt es, die eben erstellte Hello-World-Applikation in einen Dockercontainer einzubauen.
+Docker werden mithilfe eines sogenannten \emph{Dockerfile}s generiert, welches hier exemplarisch dargestellt ist (\autoref{code:hello-world-docker}).
+Auf Docker Hub stehen bereits dutzende Images für den Einsatz als Node.js-Server bereit.
+In der ersten Zeile des Dockerfiles wird mit dem Schlüsselwort \emph{FROM} das Image referenziert, das dem neu Entstehenden als Fundament dienen soll.
+Im konkreten Fall heißt das Image \enquote{node}.
+Der hinter dem Doppelpunkt folgende Teil wird als Tag bezeichnet.
+Mit seiner Hilfe wird eine spezielle Version des Images referenziert, hier \enquote{14-alpine}.
+14 steht für die zum Zeitpunkt dieses Projekts aktuelle Node.js-Version.
+Wie in der Einführung in die theoretischen Grundlagen bereits erwähnt, bauen Dockercontainer auf Linux-Systemen auf.
+Alpine ist eine äußerst leichtgewichtige Linux-Distribution.
+Dies bringt zwar unter Umständen einen verringerten Funktionsumfang mit sich, welcher allerdings bei einem stark spezialisiertem Nutzungsfall wie einem Node-Server innerhalb des Containers fast nie problematisch wird und theoretisch manuell um die benötigten Pakete erweitert werden kann, was jedoch Arbeit und Detailwissen voraussetzt.
+Stattdessen kann durch die Verwendung von Alpine als Basissystem jedoch die Größe des Images um ein Vielfaches reduziert werden.~\cite{Bailey2017}
+Ist das Basisimage gewählt, wird im nächsten Schritt das Arbeitsverzeichnis innerhalb des entstehenden Containerimages festgelegt (Zeile 2), in welchem anschließend die Projektdateien eingerichtet werden.
+Zunächst werden hierfür die \emph{package.json} und \emph{package-lock.json} kopiert (Zeile 3) und gemäß den in ihnen enthaltenen Informationen die Abhängigkeiten für das Beispielprojekt im zuvor gewählten Arbeitsverzeichnis installiert (Zeile 4).
+Nun werden in Zeile 5 noch die restlichen Dateien in das Image kopiert.
+Da die Applikation nun in einem Container laufen wird und diese grundsätzlich unabhängig vom Host-System sind -- auch seitens ihrer Netzwerkfunktionalität -- muss in Zeile 6 noch der im Node-Server gewählte Port für die Weitergabe nach außen hin eingerichtet werden.
+Abschließend bleibt nur noch festzulegen, wie der Node-Server gestartet werden kann, was in der siebten Zeile erfolgt.
+Durch das \emph{CMD}-Schlüsselwort, welches ein Array an Strings entgegennimmt, wird das benötigte Startkommando hinterlegt, welches beim Start des Containers auf dessen Linux-Kommandozeile ausgeführt wird.
+\lstinputlisting[
+	label=code:hello-world-docker,
+	caption=Integration des Hello-World-Servers in einen Dockercontainer,
+	captionpos=b
+]{Quellcode/hello-world-Dockerfile}
 
 
 \paragraph{.dockerignore}
+Im vorangegangenen Paragraphen wurden die Node-Module, die als Abhängigkeiten benötigt werden, innerhalb des Containers neu installiert, anstatt aus dem Arbeitsverzeichnis dorthin kopiert zu werden.
+Dass dieser Ansatz zu bevorzugen ist, hat verschiedene Gründe.
+Zum einen wird so gewährleistet, dass man zum Bauen des Dockerimages aus dem Quellcode keine eigene Installation von Node.js benötigt; um alle relevanten Installationsschritte kümmert sich schließlich das Node-Dockerimage.
+Zum anderen ist es auch einfach praktisch, da die Node-Module üblicherweise aus sehr vielen, sehr kleinen Dateien bestehen.
+Solche zu kopieren dauert zumeist sehr lange.
+Um nun zu verhindern, dass beim Schritt \enquote{den verblieben Rest in das Image kopieren} unbeabsichtigt doch der Modul-Ordner oder andere unliebsame Dateien in das Image kopiert wird, kann eine \emph{.dockerignore}-Datei angelegt werden.
+Alle in dieser Datei aufgezählten Ordner und Dateien werden dann vom Kopierbefehl ignoriert.
 
-Docker, Hello World, Dockerfile
 
-Node.js, empfohlene Sprache, eventuelle Alternativen (gibt nicht viele, einfach optimal für diese Aufgabe $\rightarrow$ serverseitigen Code)
 
 \section{Suche nach einer geeigneten Basis}
 Kernaufgabe des \ac{ewm-sim} ist die Simulation der OData-Schnittstelle eines vollständigen SAP-EWM-Systems.
