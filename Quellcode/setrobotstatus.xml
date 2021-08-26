@@ -1,0 +1,5 @@
+<FunctionImport Name="SetRobotStatus" ReturnType="ZEWM_ROBCO_SRV.Robot" EntitySet="RobotSet" m:HttpMethod="POST" sap:action-for="ZEWM_ROBCO_SRV.Robot">
+	<Parameter Name="Lgnum" Type="Edm.String" Mode="In" MaxLength="4"/>
+	<Parameter Name="Rsrc" Type="Edm.String" Mode="In" MaxLength="18"/>
+	<Parameter Name="Exccode" Type="Edm.String" Mode="In" MaxLength="4"/>
+</FunctionImport>

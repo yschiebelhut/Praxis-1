@@ -10,6 +10,7 @@ In der Theorie klingt dies einfach.
 Allerdings tritt an dieser Stelle sowohl das Problem auf, dass node-ui5 kaum dokumentiert, als auch der Mock Server nicht für diesen Einsatz vorgesehen ist, wodurch auch die Hilfeseiten von SAP für diesen initialen Schritt nicht sonderlich hilfreich sind.
 
 \subsection{Grundgerüst des Mock Servers}
+\label{subsec:foundation}
 Für das Node-Projekt wird zunächst die folgende package.json (\autoref{code:basic-ms-package.json}) angelegt.
 Hier wird zunächst ein Projektname mit Versionsnummer und Kurzbeschreibung angelegt, sowie in Zeile 5 der Einstiegspunkt für die Applikation definiert.
 Die drei, in Zeile 6 folgende festgelegten, Projekt-Abhängigkeiten stellen hier allerdings den primär wichtigen Teil dar.
@@ -56,3 +57,71 @@ Letztere wird anschließend noch mit dem Status-Code der \ac{AJAX}-Response vers
 	captionpos=b
 ]{Quellcode/basic-ms/mockserver.js}
 
+\subsection{Function Imports}
+Zum aktuellen Zeitpunkt ist es bereits gelungen, einen lauffähigen OData-Service zu errichten, welcher externe Anfragen beantwortet.
+Damit dieser nun als neuer \ac{ewm-sim} dienen kann, muss er allerdings zunächst mit den richtigen Mockdaten versorgt werden.
+Zu diesem Zweck muss dem Server über die \emph{metadata.xml} mitgeteilt werden, wie die Datenstrukturen und Zusammenhänge zwischen diesen aussehen, die er darstellen soll.
+Da der \ac{ewm-sim} eine genaue Nachbildung eines vollständigen \ac{EWM}-Systems sein soll, sind auch die Metadaten mit einem solchen übereinstimmend.
+Infolge dessen kann die \emph{metadata.xml} ohne Veränderungen direkt von einem bestehenden \ac{EWM}-System übernommen werden.
+Auch die darzustellenden Mockdaten haben noch dieselbe Struktur wie beim \ac{ewm-sim} in der ersten Version.
+Um Mock- und Metadaten zu verändern, müssen die jeweiligen Dateien lediglich in die entsprechenden Verzeichnisse gelegt werden, welche in \autoref{subsec:foundation} konfiguriert wurden.
+\todo{Code von Meta- und Mockdaten einfügen?}
+
+In den Metadaten werden für den vollständigen Funktionsumfang des Mock Servers jedoch überdies noch Function Imports definiert.
+Diese Funktionen stellen Anfragen dar, welche erweiterte Operationen beim Server auslösen, als ausschließlich einen Datensatz zu liefern oder zu manipulieren.
+Für die normalen Mockdaten benötigt der Server nicht mehr als die Daten und den entsprechenden Eintrag in den Metadaten.
+Bei Function Imports funktioniert das nicht so einfach, hier ist in den Metadaten lediglich festgelegt, dass eine solche Funktion zu existieren hat, auf welche \ac{HTTP}-Methode diese zu reagieren hat, welche Parameter sie entgegennimmt und was sie für einen Wertetyp zurückliefert.
+Die eigentliche Funktionalität muss jedoch für jede Funktion einzeln von Hand implementiert werden.
+Wie solch eine Implementierung aussieht, soll hier am Beispiel der Funktion \emph{SetRobotStatus} gezeigt werden.
+
+\lstinputlisting[
+	language=xml,
+	label=code:metadata-setrobotstatus,
+	caption=Metadaten der Funktion SerRobotStatus,
+	captionpos=b
+]{Quellcode/setrobotstatus.xml}
+
+In \autoref{code:metadata-setrobotstatus} ist der für die Methode relevante Ausschnitt aus der \emph{metadata.xml} zu sehen.
+Diesem kann entnommen werden, dass sich die Operation der Methode auf das \enquote{RobotSet} bezieht und die Methode auf \ac{HTTP}-POST-Anfragen reagieren soll.
+Die Methode erwartet drei Parameter (Lgnum, Rsrc, Exccode) vom Typ String mit einer jeweils festgelegten, maximalen Länge.
+
+Um jedoch den genauen Ablauf der Methode im Mock Server implementieren zu können, muss die Implementierung aus dem ABAP-Backend eines richtigen \ac{EWM}-Systems analysiert und in Node.js portiert werden.
+Dies ist überdies wichtig, da die importierten Funktionen bestimmte Fehlercodes zurückliefern, die für den Betrieb der Roboter ebenfalls essenziell sind.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Bilder/ABAP/2020-12-04 10_20_43-Class Builder Class ZCL_ZEWM_ROBCO_DPC_EXT Display_cut.png}
+	\caption{SetRobotStatus im SAP Gateway Service Builder}
+	\label{fig:gwse}
+\end{figure}
+
+\autoref{fig:gwse} zeigt einen Ausschnitt aus dem \emph{SAP Gateway Service Builder}.
+(Vollständige Screenshots werden aus Gründen der Lesbarkeit nicht dargestellt.)
+Empfängt der OData-Service den Aufruf von \emph{SetRobotStatus}, ruft er intern im Backend die Methode \emph{ZSET\_ROBOT\_STATUS} mit den mitgegebenen Parametern auf.
+Die Methode kann zwei klar definierte und eine sonstige Exception zurückliefern.
+Diese Exceptions werden Exitcodes zugeordnet und anschließend wird eine Fallentscheidung anhand dieser Rückgabewerte durchgeführt.
+Kommt es beispielsweise zur \emph{robot\_not\_found}-Exception, so wird vom OData-Service eine Antwort mit dem \ac{HTTP}-Statuscode \emph{404} zurückgegeben.
+Der Nachrichteninhalt wird durch die Konstante \emph{gc\_error\_rnf} festgelegt.
+Um von dieser den eigentlichen Wert abzurufen, muss im Class Builder (\autoref{fig:class-builder}) nachgeschlagen werden.
+Dort steht zu jeder Konstante (Attribute) der zugehörige Wert des Fehlercodes (Initial Value).
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Bilder/ABAP/2020-12-04 10_22_23-Class Builder_ Display Class ZCL_ZEWM_ROBCO_DPC_EXT_cut.png}
+	\caption{Fehlercodes im Class Builder}
+	\label{fig:class-builder}
+\end{figure}
+
+
+\subsection{Authentifizierung}
+
+\subsection{Unit-Tests}
+
+
+\section{Erstellung des Dockerimages}
+
+
+\section{Automatisierte Tests mit Travis-CI}
+
+
+\section{Deployment in \ac{GKE}}
