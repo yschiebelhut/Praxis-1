@@ -112,6 +112,47 @@ Dort steht zu jeder Konstante (Attribute) der zugehörige Wert des Fehlercodes (
 	\label{fig:class-builder}
 \end{figure}
 
+Nun gilt es die Methode in Node.js zu implementieren (\autoref{code:set-robot-status-method}).
+Hierzu wird zunächst eine Funktion mit dem entsprechenden Namen deklariert, welche die eingehende Anfrage sowie die verwendeten URL-Parameter als Eingabewerte erhält.
+Zur einfacheren Verarbeitung wird aus dem zusammenhängenden String von URL-Parametern nun ein Objekt generiert, welches Schlüssel-Wert-Paare besitzt, die entsprechend die URL-Parameter und deren Werten repräsentieren (Zeile 2-8).
+Im nächsten Schritt wird überprüft, ob gemäß der übergebenen Parameter ein Roboter im Datensatz existiert, dessen Status gesetzt werden könnte.
+Ist dies nicht der Fall, muss eine \emph{ROBOT\_NOT\_FOUND}-Exception zurückgegeben werden.
+Die Überprüfung erfolgt über eine Anfrage an das \emph{RobotSet} desselben Servers.
+Aus den URL-Parametern wird der anzufragende \ac{URI} generiert und anschließend die Anfrage ausgelöst.
+Im Falle von Misserfolg der Anfrage wird die entsprechende Fehlermeldung zurückgegeben, ansonsten kann mit der Ausführung der Funktion fortgefahren werden (vergleiche Zeile 14-34).
+
+In den Metadaten wurde für den Exccode eine maximale Länge festgelegt.
+Die Einhaltung dieser muss also überprüft werden, Überschreitung der Länge ist ein Grund zum Abbruch.
+Hat der übergebene Code jedoch die richtige Länge, wird erneut eine Anfrage an das servereigene \emph{RobotSet} geschickt.
+Dieses Mal wird jedoch keine GET-Request geschickt, sondern mittels PUT-Request die Daten eines bestehenden Datensatzes bearbeitet.
+(Durch die vorangegangene Abfrage ist sicher bekannt, dass der angefragte Roboter existiert, sonst würde diese Codestelle gar nicht ausgeführt.)
+Als Payload werden schlicht und einfach die URL-Parameter in \ac{JSON}-Form verwendet.
+Wird diese Anfrage erfolgreich abgeschlossen, wird die externe Anfrage mit \emph{200 OK} Status quittiert, andernfalls liegt ein weiterer Fehler vor.
+Im \emph{SAP Gateway Service Builder} ist nur ein weiterer Fehlertyp vorgesehen.
+Da der Roboter an dieser Stelle erwiesenermaßen existiert, liegt nun also der \emph{ROBOT\_STATUS\_NOT\_SET}-Fehler vor.
+Dieser Fehler wird ebenfalls zurückgegeben, falls der gewünschte Status länger als die maximal erlaubte Länge sein sollte und ebenfalls in sonstigen Fehlerfällen.
+
+\lstinputlisting[
+	label=code:set-robot-status-method,
+	caption=Node.js-Implementierung der SetRobotStatus-Methode,
+	captionpos=b,
+	firstline=1,
+	lastline=64
+]{Quellcode/setrobotstatus.js}
+
+Nun existiert zwar die Funktion, ihre Existenz ist dem Mock Server jedoch noch nicht bekannt.
+Um dies zu ändern, müssen zunächst die bekannten Request Handler des Mock Servers abgerufen werden.
+Im Anschluss kann ihnen ein neuer Handler hinzugefügt werden, der per regulärem Ausdruck den Pfad festlegt, über den seine Funktion ausgelöst wird, auf welche Art von \ac{HTTP}-Requests er reagiert und welche Funktion er dann zurückliefern muss.
+Abschließend müssen die modifizierten Request Handler noch erneut dem Mock Server bekannt gegeben werden (siehe \autoref{code:request-handler}).
+
+\lstinputlisting[
+	label=code:request-handler,
+	caption=Hinzufügen des Request Handlers für die SetRobotStatus-Methode,
+	captionpos=b,
+	firstline=67,
+	lastline=73
+]{Quellcode/setrobotstatus.js}
+
 
 \subsection{Authentifizierung}
 
