@@ -3,3 +3,56 @@ Nachdem die ersten Kontakte mit den beiden Kerntools erfolgt sind und eine geeig
 Wie in \autoref{sec:einarbeitung} kann auch für das richtige Projekt eine Aufteilung der Entwicklung in Erstellung des Servers und anschließende Einbindung in das Containerimage erfolgen, was insbesondere das Testen des Servers während der Entwicklung deutlich vereinfacht und mögliche Fehlerquellen eingrenzt.
 
 \section{Node-Server}
+Angesichts dessen, dass der Node-Server im Anschluss lediglich in einen Container eingeschnürt wird, ist die Erstellung des eigentlichen Servers der deutlich größere und wichtigere Bearbeitungsschritt.
+Wie bei jedem Projekt liegt auch hier der Einstiegspunkt im Errichten eines Grundgerüsts.
+Im konkreten Fall bedeutet das, das node-ui5 Modul erfolgreich in Node.js zu importieren, die richtigen Konfigurationsoptionen dafür zu finden, innerhalb des Moduls den SAP Mock Server anzusteuern und diesen unkonfiguriert für externe Anfragen erreichbar zu machen.
+In der Theorie klingt dies einfach.
+Allerdings tritt an dieser Stelle sowohl das Problem auf, dass node-ui5 kaum dokumentiert, als auch der Mock Server nicht für diesen Einsatz vorgesehen ist, wodurch auch die Hilfeseiten von SAP für diesen initialen Schritt nicht sonderlich hilfreich sind.
+
+\subsection{Grundgerüst des Mock Servers}
+Für das Node-Projekt wird zunächst die folgende package.json (\autoref{code:basic-ms-package.json}) angelegt.
+Hier wird zunächst ein Projektname mit Versionsnummer und Kurzbeschreibung angelegt, sowie in Zeile 5 der Einstiegspunkt für die Applikation definiert.
+Die drei, in Zeile 6 folgende festgelegten, Projekt-Abhängigkeiten stellen hier allerdings den primär wichtigen Teil dar.
+Das \enquote{body-parser}-Paket wird dafür benötigt, um den Inhalt von Anfragen an den Server sauber verarbeiten zu können.
+Mit den hauseigenen Bibliotheken von Node.js ist zwar die Erstellung von Webservern bereits möglich, dieser Prozess wird jedoch vom \enquote{Express}-Framework stark vereinfacht.
+Nicht zuletzt wird noch das \enquote{node-ui5}-Modul eingebunden.
+Mithilfe der hier definierten Abhängigkeiten, muss nun lediglich noch \emph{npm install} ausgeführt werden und die Implementierung des Mock Servers kann starten.
+\lstinputlisting[
+	label=code:basic-ms-package.json,
+	caption=Package.json für das Grundgerüst (gekürzt),
+	captionpos=b,
+	firstline=1,
+	lastline=10
+]{Quellcode/basic-ms/package.json}
+
+Nachfolgend wir in \autoref{code:basic-ms-mockserver.js} der Quellcode der mockserver.js dargestellt.
+Beginnend muss node-ui5 eingebunden werden (Zeile 1).
+Dies geschieht hier unter Verwendung der mitgelieferten \enquote{factory}, die einige Konfigurationsschritte beim Einbinden direkt übernimmt.
+Parameter, die sie dabei berücksichtigen soll, werden in den folgenden 3 Zeilen gesetzt, unter anderem die Variable myApp, als Referenz auf das Verzeichnis, in dem die mockserver.js liegt.
+Nachdem node-ui5 in Node eingebunden wurde, wird nun der gesamte folgende Code als Callback-Funktion der Einbindung ausgeführt.
+So enthält Zeile 7 bereits SAPUI-Code, welcher weitere SAPUI-Module einbindet (hier MockServer), welche in Zeile 9 einer anschließend automatisch ausgeführten Funktion übergeben werden.
+
+\paragraph{Konfiguration des Mock Servers}
+Ab Zeile 10 wird der eigentliche Mock Server initialisiert.
+Hierzu wird zunächst in der Variable \emph{ms} ein neues Mock Server Objekt erstellt, welches für den gesamten Subpfad von \enquote{/} zuständig ist.
+Zeile 14 folgende teilen dem Mock Server mit, wo er die Daten findet, die er simulieren soll (myApp/mockdata), wie diese strukturiert sind (myApp/metadata.xml) und ob automatisch Platzhalter für fehlende Daten generiert werden sollen.
+Zeile 19 bis 21 nehmen schließlich noch die Einstellung vor, dass der Mock Server automatisch antwortet und in diese Antwort eine künstliche Verzögerung einbaut, um die Simulation realistischer zu gestalten, bevor der Mock Server in Zeile 24 gestartet wird.
+
+\paragraph{Externe Freigabe}
+Nun läuft der Mock Server zwar und wurde mit Datensätzen versorgt, die er simulieren kann, jedoch ist er noch nicht für Anfragen außerhalb der Node.js-Umgebung erreichbar.
+Zu diesem Zweck wird nun ab Zeile 26 noch ein zusätzlicher Webserver mithilfe des Express-Framework eingerichtet.
+Zunächst werden hierzu die mit \ac{npm} installierten Module geladen und eine neue Express-Applikation initialisiert.
+Das zusätzlich installierte Modul für den body-parser wird nun als Standardparser für Anfragen an den Express-Server konfiguriert (Zeile 30 folgende).
+Anschließend wird eine Funktion festgelegt, die für jede Anfrage eines beliebigen Typs (GET, POST, PUT, ...) ausgeführt wird, die an den Express-Server geschickt werden (Zeile 35) und zwar sollen diese alle an den Mock Server weitergeleitet werden.
+Der Mock Server ist so implementiert, dass er automatisch alle \ac{AJAX}-Anfragen abfängt.
+Somit kann direkt basierend auf den Daten und Parametern der ursprünglichen Anfrage eine solche erstellt werden (Zeile 36-40).
+Der \ac{AJAX}-Anfrage wird eine Callback-Funktion übergeben, die ausgeführt wird, wenn die Antwort des Mock Servers auf die Anfrage erfolgt ist.
+In dieser werden zunächst sämtliche Header-Daten aus der \ac{AJAX}-Antwort in die Antwort des Express-Servers auf die externe Anfrage kopiert.
+Letztere wird anschließend noch mit dem Status-Code der \ac{AJAX}-Response versehen und mit deren Text zurück an den externen Client geschickt (Zeile 41-51).
+Übrig bleibt nur noch das Starten des Express-Servers (Zeile 56).
+\lstinputlisting[
+	label=code:basic-ms-mockserver.js,
+	caption=Quellcode des Grundgerüsts (mockserver.js),
+	captionpos=b
+]{Quellcode/basic-ms/mockserver.js}
+
