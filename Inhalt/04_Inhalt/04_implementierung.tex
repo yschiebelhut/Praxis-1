@@ -81,11 +81,11 @@ Wie solch eine Implementierung aussieht, soll hier am Beispiel der Funktion \emp
 	captionpos=b
 ]{Quellcode/setrobotstatus.xml}
 
-In \autoref{code:metadata-setrobotstatus} ist der für die Methode relevante Ausschnitt aus der \emph{metadata.xml} zu sehen.
-Diesem kann entnommen werden, dass sich die Operation der Methode auf das \enquote{RobotSet} bezieht und die Methode auf \ac{HTTP}-POST-Anfragen reagieren soll.
-Die Methode erwartet drei Parameter (Lgnum, Rsrc, Exccode) vom Typ String mit einer jeweils festgelegten, maximalen Länge.
+In \autoref{code:metadata-setrobotstatus} ist der für die Funktion relevante Ausschnitt aus der \emph{metadata.xml} zu sehen.
+Diesem kann entnommen werden, dass sich die Operation der Funktion auf das \enquote{RobotSet} bezieht und die Funktion auf \ac{HTTP}-POST-Anfragen reagieren soll.
+Die Funktion erwartet drei Parameter (Lgnum, Rsrc, Exccode) vom Typ String mit einer jeweils festgelegten, maximalen Länge.
 
-Um jedoch den genauen Ablauf der Methode im Mock Server implementieren zu können, muss die Implementierung aus dem ABAP-Backend eines richtigen \ac{EWM}-Systems analysiert und in Node.js portiert werden.
+Um jedoch den genauen Ablauf der Funktion im Mock Server implementieren zu können, muss die Implementierung aus dem ABAP-Backend eines richtigen \ac{EWM}-Systems analysiert und in Node.js portiert werden.
 Dies ist überdies wichtig, da die importierten Funktionen bestimmte Fehlercodes zurückliefern, die für den Betrieb der Roboter ebenfalls essenziell sind.
 
 \begin{figure}[!ht]
@@ -97,8 +97,8 @@ Dies ist überdies wichtig, da die importierten Funktionen bestimmte Fehlercodes
 
 \autoref{fig:gwse} zeigt einen Ausschnitt aus dem \emph{SAP Gateway Service Builder}.
 (Vollständige Screenshots werden aus Gründen der Lesbarkeit nicht dargestellt.)
-Empfängt der OData-Service den Aufruf von \emph{SetRobotStatus}, ruft er intern im Backend die Methode \emph{ZSET\_ROBOT\_STATUS} mit den mitgegebenen Parametern auf.
-Die Methode kann zwei klar definierte und eine sonstige Exception zurückliefern.
+Empfängt der OData-Service den Aufruf von \emph{SetRobotStatus}, ruft er intern im Backend die Funktion \emph{ZSET\_ROBOT\_STATUS} mit den mitgegebenen Parametern auf.
+Die Funktion kann zwei klar definierte und eine sonstige Exception zurückliefern.
 Diese Exceptions werden Exitcodes zugeordnet und anschließend wird eine Fallentscheidung anhand dieser Rückgabewerte durchgeführt.
 Kommt es beispielsweise zur \emph{robot\_not\_found}-Exception, so wird vom OData-Service eine Antwort mit dem \ac{HTTP}-Statuscode \emph{404} zurückgegeben.
 Der Nachrichteninhalt wird durch die Konstante \emph{gc\_error\_rnf} festgelegt.
@@ -112,7 +112,7 @@ Dort steht zu jeder Konstante (Attribute) der zugehörige Wert des Fehlercodes (
 	\label{fig:class-builder}
 \end{figure}
 
-Nun gilt es die Methode in Node.js zu implementieren (\autoref{code:set-robot-status-method}).
+Nun gilt es die Funktion in Node.js zu implementieren (\autoref{code:set-robot-status-method}).
 Hierzu wird zunächst eine Funktion mit dem entsprechenden Namen deklariert, welche die eingehende Anfrage sowie die verwendeten URL-Parameter als Eingabewerte erhält.
 Zur einfacheren Verarbeitung wird aus dem zusammenhängenden String von URL-Parametern nun ein Objekt generiert, welches Schlüssel-Wert-Paare besitzt, die entsprechend die URL-Parameter und deren Werten repräsentieren (Zeile 2-8).
 Im nächsten Schritt wird überprüft, ob gemäß der übergebenen Parameter ein Roboter im Datensatz existiert, dessen Status gesetzt werden könnte.
@@ -134,7 +134,7 @@ Dieser Fehler wird ebenfalls zurückgegeben, falls der gewünschte Status länge
 
 \lstinputlisting[
 	label=code:set-robot-status-method,
-	caption=Node.js-Implementierung der SetRobotStatus-Methode,
+	caption=Node.js-Implementierung der Funktion SetRobotStatus,
 	captionpos=b,
 	firstline=1,
 	lastline=64
@@ -147,7 +147,7 @@ Abschließend müssen die modifizierten Request Handler noch erneut dem Mock Ser
 
 \lstinputlisting[
 	label=code:request-handler,
-	caption=Hinzufügen des Request Handlers für die SetRobotStatus-Methode,
+	caption=Hinzufügen des Request Handlers für die Funktion SetRobotStatus,
 	captionpos=b,
 	firstline=67,
 	lastline=73
