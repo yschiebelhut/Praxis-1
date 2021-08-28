@@ -88,7 +88,7 @@ Die Methode erwartet drei Parameter (Lgnum, Rsrc, Exccode) vom Typ String mit ei
 Um jedoch den genauen Ablauf der Methode im Mock Server implementieren zu können, muss die Implementierung aus dem ABAP-Backend eines richtigen \ac{EWM}-Systems analysiert und in Node.js portiert werden.
 Dies ist überdies wichtig, da die importierten Funktionen bestimmte Fehlercodes zurückliefern, die für den Betrieb der Roboter ebenfalls essenziell sind.
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
 	\centering
 	\includegraphics[width=\textwidth]{Bilder/ABAP/2020-12-04 10_20_43-Class Builder Class ZCL_ZEWM_ROBCO_DPC_EXT Display_cut.png}
 	\caption{SetRobotStatus im SAP Gateway Service Builder}
@@ -105,7 +105,7 @@ Der Nachrichteninhalt wird durch die Konstante \emph{gc\_error\_rnf} festgelegt.
 Um von dieser den eigentlichen Wert abzurufen, muss im Class Builder (\autoref{fig:class-builder}) nachgeschlagen werden.
 Dort steht zu jeder Konstante (Attribute) der zugehörige Wert des Fehlercodes (Initial Value).
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
 	\centering
 	\includegraphics[width=\textwidth]{Bilder/ABAP/2020-12-04 10_22_23-Class Builder_ Display Class ZCL_ZEWM_ROBCO_DPC_EXT_cut.png}
 	\caption{Fehlercodes im Class Builder}
@@ -155,11 +155,79 @@ Abschließend müssen die modifizierten Request Handler noch erneut dem Mock Ser
 
 
 \subsection{Authentifizierung}
+Die OData-Schnittstelle des \ac{ewm-sim} ist dafür vorgesehen, innerhalb eines Netzwerks freigegeben zu werden.
+Im aktuellen Zustand wäre jeder Client in diesem Netzwerk in der Lage, nicht nur Daten von dieser Schnittstelle anzufragen, sondern diese dort auch zu manipulieren, wodurch der ordnungsgemäße Betrieb des \ac{ewm-sim} gestört werden kann.
+Aus diesem Grund ist es sinnvoll, eine Authentifizierung einzubauen, die den bislang offenen Zugriff beschränkt.
+Eine simple und verbreitete Methode hierfür ist \ac{HTTP}-Authentifizierung, welche, wie der Name schon sagt, direkt in \ac{HTTP} integriert ist.
+Um einen Express-Server mit dieser Art der Authentifizierung zu sichern, wird lediglich ein weiteres \ac{npm}-Modul benötigt -- \emph{express-basic-auth}.
+Des Weiteren muss die \emph{mockserver.js} um den in \autoref{code:basic-auth} dargestellten Code erweitert werden.
+Zunächst wird hier das Modul in den Quellcode importiert (Zeile 1).
+Es folgt eine Fallunterscheidung, welche überprüft, ob Zugangsdaten für den Server festgelegt worden sind.
+Wie im Umfeld von Containeranwendungen üblich, werden die zu nutzenden Zugangsdaten nicht in den Quellcode integriert, sondern zum Zeitpunkt des Ausführens mittels Umgebungsvariablen festgelegt.
+Dies sorgt zum einen dafür, dass für ein Ändern der Zugangsdaten nicht der Quellcode bearbeitet werden muss, zum anderen ist es somit auch unmöglich, den Server mit Standard-Anmeldedaten zu betreiben, was ein großes Sicherheitsmanko darstellen würde.
+Wurden keine Zugangsdaten per Umgebungsvariable gesetzt, bricht der Server den Start ab (Zeilen 11-13).
+Andernfalls wird in Zeilen 4-8 die \ac{HTTP}-Authentifizierung initialisiert.
+Diese nutzt die \emph{safeCompare}-Methode der importierten Bibliothek, welche bereits gegen einige mögliche Arten von Attacken abgesichert ist, und vergleicht Nutzernamen und Passwort, die der Server bei einer Anfrage erhält, mit den in den Umgebungsvariablen festgelegten.
+Stimmen beide Wertepaare überein, wird \emph{true} zurückgegeben; die Authentifizierung war erfolgreich.
+
+\lstinputlisting[
+	label=code:basic-auth,
+	caption=Integration von HTTP-Authentifizierung in den Mock Server,
+	captionpos=b
+]{Quellcode/basic-auth.js}
 
 \subsection{Unit-Tests}
+Da der \ac{ewm-sim} bei der Entwicklung von Produktivsystemen eingesetzt werden soll, ist es von großer Bedeutung, dass er einwandfrei arbeitet.
+Um dies zu gewährleisten, ist eine umfassende Überprüfung nach jeder Änderung unerlässlich.
+Theoretisch könnten diese Tests händisch durchgeführt werden.
+Allerdings hat eine große Software wie der im Zuge dieses Projekts erstellte Mock Server einen so ausgedehnten Funktionsumfang, dass Testungen durch einen Menschen nur stichprobenartig einzelne Funktionen überprüfen könnten.
+Unit-Tests oder auch Modultests genannt bieten hingegen eine automatisierte Lösung des Testproblems.
+Softwareentwickler müssen bei dieser Variante lediglich einmal solche Tests für jede zu überprüfende Funktionalität ihres Programms schreiben.
+Von dort an können die Tests dann eigenständig ausgeführt werden und zeigen im Falle von Fehlern an, wo das tatsächliche Verhalten der Software vom erwarteten Ergebnis abweicht.
+
+Modultests sind in der Softwareentwicklung sehr verbreitet, wodurch praktischerweise für eine populäre Sprache wie Node.js bereits Frameworks zur Erstellung und Durchführung solcher Tests existieren.
+Eines der am weitesten verbreiteten ist \emph{Mocha} (verfügbar als \ac{npm}-Modul), mit welchem auch schon die Tests für die erste Version des \ac{ewm-sim} durchgeführt wurden.
+Beides in Betracht ziehend fiel auch für die neue Version des \ac{ewm-sim} die Wahl auf Mocha, sodass auch einige bereits bestehende Tests übernommen werden konnten.
+Mocha-Tests werden einfach als normale JavaScript-Datei geschrieben und in einem \enquote{test} genannten Ordner im Projektwurzelverzeichnis abgelegt.
+
+\autoref{code:tests} zeigt beispielhaften Inhalt dieser Datei.
+Da die Tests automatisiert laufen sollen, muss bei deren Ausführung der Mock Server ebenfalls automatisch gestartet und wieder gestoppt werden, was auch die Konfiguration der Umgebungsvariablen inkludiert und in den ersten drei Zeilen vorgenommen wird.
+In den Zeilen 5-7 werden für die Testdurchführung benötigte Bibliotheken geladen.
+Dies sind zum einen der Mock Server, eine weitere Bibliothek, die bei der Beschreibung der Testfälle benötigt wird, sowie eine aus dem ersten \ac{ewm-sim} übernommene Hilfsbibliothek, um einfach Anfragen an den Testserver schicken zu können.
+Anschließend folgen die eigentlichen Tests.
+Testfälle in Mocha sind entfernt einer natürlichen Sprache nachempfunden.
+Somit wird ein Testset mit dem Schlüsselwort \emph{\enquote{describe}} (dt. \enquote{beschreibe}) und einer menschenlesbaren Kurzbeschreibung der nachfolgenden Tests eingeleitet (Zeile 9).
+Da es für automatisierte Tests üblich ist, dass gewisse Schritte vor und nach der Ausführung eines bestimmten Testfalls durchgeführt werden müssen, bringt Mocha für solches eigene Funktionen (\emph{before} und \emph{after}) mit.
+Für den vorliegenden Test erfolgt in der \emph{before}-Funktion der Startvorgang des Mock Servers.
+Anschließend folgen die, durch das Schlüsselwort \emph{\enquote{it}} und eine genaue Beschreibung des zu prüfenden Falls gekennzeichneten atomaren Tests.
+Diese führen dann die zu testende Interaktion mit dem Server durch und vergleichen das erzielte Resultat (A) mittels der Funktion \emph{\enquote{assert.deepStrictEqual(A, B)}} mit dem erwarteten Resultat (B).
+Gleichen sich die Ergebnisse exakt, war der jeweilige Test erfolgreich.
+
+\lstinputlisting[
+	label=code:tests,
+	caption=Ausschnitt aus den Modultests,
+	captionpos=b
+]{Quellcode/tests.js}
 
 
 \section{Erstellung des Dockerimages}
+Nachdem der Node-Server vollständig erstellt ist und automatisiert getestet werden kann, besteht der nächste Schritt in der Einbindung in ein Dockerimage.
+Der Vorgang ist nur unwesentlich komplizierter als beim in \autoref{sec:einarbeitung} beschriebenen Hello-World-Docker.
+Als Besonderheit kommt hier allerdings dazu, dass das Zielimage möglichst klein sein soll.
+Aufgrund von Artefakten, die beim Generieren der Node-Module entstehen, muss hier auf ein Multi-Stage-Build zurückgegriffen werden.
+\Dash der Prozess der Erstellung des Dockerimages wird in mehrere Abschnitte aufgeteilt.
+In \autoref{code:Dockerfile-ewm-sim} ist das entsprechende Dockerfile zu sehen.
+Die erste Buildstufe wird in den Zeilen 1-5 durchlaufen.
+Hierbei werden die \emph{package.json} sowie die \emph{package-lock.json} in das Arbeitsverzeichnis kopiert und dort mittels \ac{npm} die referenzierten Pakete generiert und installiert.
+Anschließend wird die Buildstufe (Zeilen 7-11) gestartet.
+Dort werden die restlichen Projektdateien in das eigentliche Containerimage kopiert und anschließend das während der ersten Buildstufe aufgebaute Node-Modulverzeichnis aus dem ersten, temporären Image in das Zielimage kopiert.
+Abschließend folgt noch die standardmäßige Freigabe des Ports \emph{8080} für den Webserver (dieser Port kann auch später noch über die Kommandozeile zur Laufzeit angepasst werden) und die Festlegung der Server-Kommandozeile, welche beim Dockerstart ausgeführt werden soll, um auch den Server hochzufahren.
+
+\lstinputlisting[
+	label=code:Dockerfile-ewm-sim,
+	caption=Dockerfile für den \ac{ewm-sim},
+	captionpos=b
+]{Quellcode/Dockerfile}
 
 
 \section{Automatisierte Tests mit Travis-CI}
