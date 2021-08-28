@@ -230,7 +230,33 @@ Abschließend folgt noch die standardmäßige Freigabe des Ports \emph{8080} fü
 ]{Quellcode/Dockerfile}
 
 
-\section{Automatisierte Tests mit Travis-CI}
+\section{Automatisierte Tests mit Travis CI}
+Wie in \autoref{sec:travis-desc} beschrieben, ist Travis CI ein häufig verwendeter Dienst, um Modultests automatisiert ausführen zu lassen, wenn der Code im Online-Repository aktualisiert wird und somit die Integrität der Software zu gewährleisten.
+Für dieses Projekt wurde Travis-CI.org (inzwischen zugunsten der neuen Version Travis-CI.com eingestellte Variante) verwendet.
+Um Tests für ein GitHub-Repository in Travis CI einzurichten, müssen zwei Dinge erledigt werden.
+Zum einen muss eine Registrierung mit dem GitHub-Account, dem das Repository gehört, auf der Website von Travis CI erfolgen.
+Hierbei erteilt man dem Dienst Zugriffsberechtigungen für die dem Account zugehörigen Repositories.
+Anschließend wird einem von Travis CI eine Liste der auf dem Account gefundenen Repositories angezeigt, in der man mit nur einem weiteren Klick die automatische Verarbeitung für ausgewählte Repositories aktivieren kann.
+
+Als weiterer Schritt muss Travis CI nun noch eine Konfiguration erhalten, wie die Tests für das registrierte Repository durchzuführen sind.
+Diese Konfiguration erfolgt mittels der Datei \emph{\enquote{.travis.yml}}, welche im Projektwurzelverzeichnis angelegt wird.
+In \autoref{code:travis.yml} ist die Konfigurationsdatei für den \ac{ewm-sim} zu sehen.
+Hier wird zunächst festgelegt, in welcher Programmiersprache das Projekt geschrieben wurde und welche Version der Sprache zu verwenden ist (Zeilen 1-3).
+Die \emph{install}-Sektion in Zeile 4 definiert, welche Kommandos zur Vorbereitung der Testumgebung ausgeführt werden müssen.
+Im konkreten Fall müssen beispielsweise die Abhängigkeiten des Node-Servers installiert werden (Zeile 5).
+Es können auch weitere Hook festgelegt werden, so zum Beispiel der in Zeile 6 aufgeführte \emph{after\_success}-Hook, der nach einer erfolgreichen Ausführung des Tests angewandt wird.
+Hier wird nach dem Test noch die \enquote{Coverage} (dt. Abdeckung) bestimmt (Zeile 7).
+Diese gibt an, wie groß der Anteil des Quellcodes ist, welcher von den Tests abgedeckt wird.
+Eine geringe Coverage kann somit darauf hindeuten, dass nicht ausreichend Testfälle definiert wurden, um das korrekte Verhalten der Applikation zu verifizieren.
+Ebenfalls in der Konfigurationsdatei festgelegt werden Benachrichtigungen (Zeile 8 fort folgende).
+Für den \ac{ewm-sim} wurde dort eine E-Mail-Adresse angegeben, die im Falle von fehlgeschlagenen Tests automatisch benachrichtigt wird.
+
+\lstinputlisting[
+	label=code:travis.yml,
+	caption=Konfigurationsdatei für automatisierte Tests des \ac{ewm-sim} mit Travis CI,
+	captionpos=b
+]{Quellcode/travis.yml}
 
 
 \section{Deployment in \ac{GKE}}
+\todo{mach ich das überhaupt noch?..}

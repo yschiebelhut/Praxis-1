@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+- 14.15.0
+install:
+- npm install
+after_success:
+- npm run coverage
+notifications:
+  email:
+  - y.schiebelhut@sap.com
