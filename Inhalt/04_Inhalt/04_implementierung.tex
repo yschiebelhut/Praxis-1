@@ -15,7 +15,7 @@ Für das Node-Projekt wird zunächst die folgende package.json Datei (\autoref{c
 Hier wird ein Projektname mit Versionsnummer und Kurzbeschreibung angelegt, sowie in Zeile 5 der Einstiegspunkt für die Applikation definiert.
 Die drei, in Zeile 6 folgende festgelegten, Projekt-Abhängigkeiten stellen hier allerdings den primär wichtigen Teil dar.
 Das \enquote{body-parser}-Paket wird dafür benötigt, um den Inhalt von Anfragen an den Server sauber verarbeiten zu können.
-Mit den hauseigenen Bibliotheken von Node.js ist zwar die Erstellung von Webservern bereits möglich, dieser Prozess wird jedoch vom \enquote{Express}-Framework stark vereinfacht.
+Mit den hauseigenen Bibliotheken von Node.js ist zwar die Erstellung von Webservern bereits möglich, dieser Prozess wird jedoch vom \enquote{Express}-Framework stark vereinfacht.~\cite{express}
 Nicht zuletzt wird noch das \enquote{node-ui5}-Modul eingebunden.
 Mithilfe der hier definierten Abhängigkeiten, muss nun lediglich noch \emph{npm install} ausgeführt werden und die Implementierung des Mock Servers kann starten.
 \lstinputlisting[
@@ -37,7 +37,7 @@ So enthält Zeile 7 bereits SAPUI-Code, welcher weitere SAPUI-Module einbindet (
 Ab Zeile 10 wird der eigentliche Mock Server initialisiert.
 Hierzu wird zunächst in der Variable \emph{ms} ein neues Mock Server Objekt erstellt, welches für den gesamten Subpfad von \enquote{/} zuständig ist.
 Zeile 14 folgende teilen dem Mock Server mit, wo er die Daten findet, die er simulieren soll (myApp/mockdata), wie diese strukturiert sind (myApp/metadata.xml) und ob automatisch Platzhalter für fehlende Daten generiert werden sollen.
-Zeile 19 bis 21 nehmen schließlich noch die Einstellung vor, dass der Mock Server automatisch antwortet und in diese Antwort eine künstliche Verzögerung einbaut, um die Simulation realistischer zu gestalten, bevor der Mock Server in Zeile 24 gestartet wird.
+Zeile 19 bis 21 nehmen schließlich noch die Einstellung vor, dass der Mock Server automatisch antwortet und in diese Antwort eine künstliche Verzögerung einbaut, um die Simulation realistischer zu gestalten, bevor der Mock Server in Zeile 24 gestartet wird.~\cite{mock-srv-help}
 
 \paragraph{Externe Freigabe}
 Nun läuft der Mock Server zwar und wurde mit Datensätzen versorgt, die er simulieren kann, jedoch ist er noch nicht für Anfragen außerhalb der Node.js-Umgebung erreichbar.
@@ -159,7 +159,7 @@ Die \ac{OData}-Schnittstelle des \ac{ewm-sim} ist dafür vorgesehen, innerhalb e
 Im aktuellen Zustand wäre jeder Client in diesem Netzwerk in der Lage, nicht nur Daten von dieser Schnittstelle anzufragen, sondern diese dort auch zu manipulieren, wodurch der ordnungsgemäße Betrieb des \ac{ewm-sim} gestört werden kann.
 Aus diesem Grund ist es sinnvoll, eine Authentifizierung einzubauen, die den bislang offenen Zugriff beschränkt.
 Eine simple und verbreitete Methode hierfür ist \ac{HTTP}-Authentifizierung, welche, wie der Name schon sagt, direkt in \ac{HTTP} integriert ist.
-Um einen Express-Server mit dieser Art der Authentifizierung zu sichern, wird lediglich ein weiteres \ac{npm}-Modul benötigt -- \emph{express-basic-auth}.
+Um einen Express-Server mit dieser Art der Authentifizierung zu sichern, wird lediglich ein weiteres \ac{npm}-Modul benötigt -- \emph{express-basic-auth}.~\cite{auth-npm, auth-tutorial}
 Des Weiteren muss die \emph{mockserver.js} um den in \autoref{code:basic-auth} dargestellten Code erweitert werden.
 Zunächst wird hier das Modul in den Quellcode importiert (Zeile 1).
 Es folgt eine Fallunterscheidung, welche überprüft, ob Zugangsdaten für den Server festgelegt worden sind.
@@ -188,7 +188,7 @@ Von dort an können die Tests dann eigenständig ausgeführt werden und zeigen i
 Modultests sind in der Softwareentwicklung sehr verbreitet, wodurch praktischerweise für eine populäre Sprache wie Node.js bereits Frameworks zur Erstellung und Durchführung solcher Tests existieren.
 Eines der am weitesten verbreiteten ist \emph{Mocha} (verfügbar als \ac{npm}-Modul), mit welchem auch schon die Tests für die erste Version des \ac{ewm-sim} durchgeführt wurden.
 Beides in Betracht ziehend fiel auch für die neue Version des \ac{ewm-sim} die Wahl auf Mocha, sodass auch einige bereits bestehende Tests übernommen werden konnten.
-Mocha-Tests werden einfach als normale JavaScript-Datei geschrieben und in einem \enquote{test} genannten Ordner im Projektwurzelverzeichnis abgelegt.
+Mocha-Tests werden einfach als normale JavaScript-Datei geschrieben und in einem \enquote{test} genannten Ordner im Projektwurzelverzeichnis abgelegt.~\cite{mocha}
 
 \autoref{code:tests} zeigt einen beispielhaften Ausschnitt des Inhalts dieser Datei.
 Da die Tests automatisiert laufen sollen, muss bei deren Durchführung der Mock Server ebenfalls automatisch gestartet und wieder gestoppt werden, was auch die Konfiguration der Umgebungsvariablen inkludiert, welche in den ersten drei Zeilen vorgenommen wird.
@@ -221,7 +221,7 @@ Die erste Buildstufe wird in den Zeilen 1-5 durchlaufen.
 Hierbei werden die \emph{package.json} sowie die \emph{package-lock.json} in das Arbeitsverzeichnis kopiert und dort mittels \ac{npm} die referenzierten Pakete generiert und installiert.
 Anschließend wird die zweite Buildstufe (Zeilen 7-11) gestartet.
 Dort werden die restlichen Projektdateien in das eigentliche Containerimage kopiert und anschließend das während der ersten Buildstufe aufgebaute Node-Modulverzeichnis aus dem ersten, temporären Image in das Zielimage kopiert.
-Abschließend folgt noch die standardmäßige Freigabe des Ports \emph{8080} für den Webserver (dieser Port kann auch später noch über die Kommandozeile zur Laufzeit angepasst werden) und die Festlegung der Server-Kommandozeile, welche beim Dockerstart ausgeführt werden soll, um auch den Server hochzufahren.
+Abschließend folgt noch die standardmäßige Freigabe des Ports \emph{8080} für den Webserver (dieser Port kann auch später noch über die Kommandozeile zur Laufzeit angepasst werden) und die Festlegung der Server-Kommandozeile, welche beim Dockerstart ausgeführt werden soll, um auch den Server hochzufahren.~\cite{docker-multistage}
 
 \lstinputlisting[
 	label=code:Dockerfile-ewm-sim,
@@ -249,7 +249,7 @@ Hier wird nach den Tests noch die \enquote{Coverage} (dt. Abdeckung) bestimmt (Z
 Diese gibt an, wie groß der Anteil des Quellcodes ist, welcher von den Tests abgedeckt wird.
 Eine geringe Coverage kann somit darauf hindeuten, dass nicht ausreichend Testfälle definiert wurden, um das korrekte Verhalten der Applikation zu verifizieren.
 Ebenfalls in der Konfigurationsdatei festgelegt werden Benachrichtigungen (Zeile 8 fort folgende).
-Für den \ac{ewm-sim} wurde dort eine E-Mail-Adresse angegeben, die im Falle von fehlgeschlagenen Tests automatisch benachrichtigt wird.
+Für den \ac{ewm-sim} wurde dort eine E-Mail-Adresse angegeben, die im Falle von fehlgeschlagenen Tests automatisch benachrichtigt wird.~\cite{travis-tutorial}
 
 \lstinputlisting[
 	label=code:travis.yml,

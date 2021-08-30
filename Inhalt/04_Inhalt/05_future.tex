@@ -4,7 +4,7 @@ Nach Fertigstellung der Neuauflage des \ac{ewm-sim} stellen sich nun natürlich 
 \section{Locust}
 Die einfachste Methode, um die Performance eines Webservices zu bewerten, ist ein sogenannter Load Test.
 Hierbei wird eine hohe Last in Form von Anfragen an den Service angelegt und währenddessen unter anderem protokolliert, wie lange dieser zur Beantwortung der Anfragen braucht und wie viele Anfragen dabei verloren gehen.
-Locust ist eine Python-Bibliothek, um solche Tests ohne großen Aufwand durchführen zu können.
+Locust ist eine Python-Bibliothek, um solche Tests ohne großen Aufwand durchführen zu können.~\cite{locust, locust-doc}
 Man muss diese hierfür lediglich installieren und in einer kleinen Datei die möglichen Tests beschreiben, die durchgeführt werden sollen.
 Zum Vergleich der beiden Service-Implementierungen wurde die in \autoref{code:locustfile.py} dargestellte Locustdatei angelegt.
 Die möglichen Anfragen an den Server werden als Methoden der Klasse \enquote{ODataUser} implementiert.

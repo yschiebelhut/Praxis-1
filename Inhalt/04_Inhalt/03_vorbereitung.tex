@@ -70,7 +70,7 @@ Zum einen wird so gewährleistet, dass man zum Bauen des Dockerimages aus dem Qu
 Zum anderen ist es auch einfach praktisch, da die Node-Module üblicherweise aus sehr vielen, sehr kleinen Dateien bestehen.
 Solche zu kopieren dauert zumeist sehr lange.
 Um nun zu verhindern, dass beim Schritt \enquote{den verbliebenen Rest in das Image kopieren} unbeabsichtigt doch der Modul-Ordner oder andere unliebsame Dateien in das Image kopiert wird, kann eine \emph{.dockerignore}-Datei angelegt werden.
-Alle in dieser Datei aufgezählten Ordner und Dateien werden dann vom Kopierbefehl ignoriert.
+Alle in dieser Datei aufgezählten Ordner und Dateien werden dann vom Kopierbefehl ignoriert.~\cite{dockerignore}
 
 
 
@@ -112,4 +112,4 @@ Mit dem \ac{npm}-Modul \emph{node-ui5} wurde eine Lösung, wie SAPUI5-Tools nich
 Grundlegend funktioniert dieses Modul ziemlich gut.
 Leider bringt es jedoch übliche Probleme solcher in Eigenregie entwickelter \enquote{Ein-Mann-Projekte} mit sich: Die Dokumentation ist nicht besonders ausführlich und zumeist sind andere Arbeitsaufgaben wichtiger, als das Aufspüren und beheben kleinerer Probleme.
 Diese Probleme stellten sich, wie zu erwarten, im Laufe des Projekts gelegentlich als kleinere oder größere Schwierigkeiten dar.
-Da dieses Modul jedoch das einzig aktuell verfügbare ist, mit dem alle Anforderungen an den \ac{ewm-sim} erfüllt, sowie eine deutliche Verbesserung der Performance erreicht werden können, die eigene Neuerstellung noch deutlich schwieriger geworden und weit über die Möglichkeiten dieser Praxisphase hinaus gegangen wären, wurde es trotzdem als Ausgangspunkt für dieses Projekt gewählt.
+Da dieses Modul jedoch das einzig aktuell verfügbare ist, mit dem alle Anforderungen an den \ac{ewm-sim} erfüllt, sowie eine deutliche Verbesserung der Performance erreicht werden können, die eigene Neuerstellung noch deutlich schwieriger geworden und weit über die Möglichkeiten dieser Praxisphase hinaus gegangen wären, wurde es trotzdem als Ausgangspunkt für dieses Projekt gewählt.~\cite{node-ui5-npm, node-ui5-github}
