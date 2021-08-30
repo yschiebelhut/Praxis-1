@@ -3,7 +3,7 @@ Nach Fertigstellung der Neuauflage des \ac{ewm-sim} stellen sich nun natürlich 
 
 \section{Locust}
 Die einfachste Methode, um die Performance eines Webservices zu bewerten, ist ein sogenannter Load Test.
-Hierbei wird eine hohe Last an Anfragen an den Service angelegt und währenddessen unter anderem protokolliert, wie lange dieser zur Beantwortung der Anfragen dauert und wie viele Anfragen dabei verloren gehen.
+Hierbei wird eine hohe Last in Form von Anfragen an den Service angelegt und währenddessen unter anderem protokolliert, wie lange dieser zur Beantwortung der Anfragen braucht und wie viele Anfragen dabei verloren gehen.
 Locust ist eine Python-Bibliothek, um solche Tests ohne großen Aufwand durchführen zu können.
 Man muss diese hierfür lediglich installieren und in einer kleinen Datei die möglichen Tests beschreiben, die durchgeführt werden sollen.
 Zum Vergleich der beiden Service-Implementierungen wurde die in \autoref{code:locustfile.py} dargestellte Locustdatei angelegt.
@@ -16,7 +16,9 @@ Um die Performance des \ac{ewm-sim} zu testen, werden verschiedene Typen von Anf
 	language=Python,
 	label=code:locustfile.py,
 	caption=Testbeschreibung für Locust,
-	captionpos=b
+	captionpos=b,
+	breaklines=true,
+	columns=fullflexible
 ]{Quellcode/locustfile.py}
 
 Anschließend kann Locust per Aufruf in der Kommandozeile gestartet werden.
@@ -42,9 +44,9 @@ Zwar ist die absolute Fehlerrate bei der zweiten Version mit 4,9 Fehlern pro Sek
 \end{figure}
 
 \section{Future Work}
-Trotz der nachweislich besseren Performance kam es bei der längeren Verwendung der neuen Version des \ac{ewm-sim} zu Probleme.
+Trotz der nachweislich besseren Performance kam es bei der längeren Verwendung der neuen Version des \ac{ewm-sim} zu Problemen.
 Diese bestehen darin, dass eine Funktionalität endlos neue Daten generiert.
-Langfristig führt dies jedoch dazu, dass sich der Arbeitsspeicher viel zu stark ausgelastet wird, was schlussendlich zu einem Absturz des Simulators führen kann.
+Langfristig führt dies jedoch dazu, dass der Arbeitsspeicher viel zu stark ausgelastet wird, was schlussendlich zu einem Absturz des Simulators führen kann.
 
 Zukünftig ist also auf jeden Fall dieser Missstand noch zu beheben.
 Generell war im Rahmen dieser Projektarbeit keine Zeit für ausreichende Langzeittests oder eine Verknüpfung mit den Systemen, die später auf den \ac{ewm-sim} zurückgreifen sollen.
@@ -52,9 +54,9 @@ Diese Schritte müssen somit mit gebotener Sorgfalt durchgeführt werden, um auc
 
 Des Weiteren wird momentan mit node-ui5 auf ein nicht aktiv entwickeltes und gepflegtes Produkt zurückgegriffen, welches überdies die Komponenten von SAPUI5 in einer Art und Weise verwendet, welche von SAP nie vorgesehen war.
 Die aktuelle Implementierung auf Basis von node-ui5 eignet sich zwar schon deutlich besser, als die ursprüngliche, welche innerhalb eines headless Browsers lief, jedoch ist weiterhin ein Overhead vorhandenen.
-Aus diesen Gründen sollte es langfristig in Betracht gezogen werden, die node-ui5-Basis durch eine eigene OData-Implementierung zu ersetzen.
+Aus diesen Gründen sollte langfristig in Betracht gezogen werden, die node-ui5-Basis durch eine eigene OData-Implementierung zu ersetzen.
 
 Allerdings muss bei alldem auch betrachtet werden, dass es sich bei dem \ac{ewm-sim} eben um eine Simulationsumgebung handelt und nicht um ein Produktivsystem.
 High Level Performance ist somit nicht kritisch und aufgrund des erheblichen Arbeitsaufwands, welcher mit den vorgeschlagenen Verbesserungen verbunden ist, ist die Umsetzung der meisten davon vermutlich nicht sinnvoll.
 
-Der vollständige Quellcode des Projekts kann unter \url{https://github.com/SAP/ewm-cloud-robotics/tree/0353baf3532041cecffcc4243ae52d78a467d5cf/docker/ewm-sim} (Abgabezeitpunkt) und \url{https://github.com/SAP/ewm-cloud-robotics/tree/master/docker/ewm-sim} (aktueller Entwicklungsstand) eingesehen werden.
+Der vollständige Quellcode des Projekts kann unter den Adressen \url{https://github.com/SAP/ewm-cloud-robotics/tree/0353baf3532041cecffcc4243ae52d78a467d5cf/docker/ewm-sim} (Abgabezeitpunkt) und \url{https://github.com/SAP/ewm-cloud-robotics/tree/master/docker/ewm-sim} (aktueller Entwicklungsstand) eingesehen werden.

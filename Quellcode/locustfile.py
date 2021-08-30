@@ -32,8 +32,10 @@ class ODataUser(HttpUser):
         count = self.client.get("/odata/SAP/ZEWM_ROBCO_SRV/RobotSet/$count",
                                 auth=(odataUser, odataPasswd)).json()
         if (int(count) > 0):
-            robot = self.client.get("/odata/SAP/ZEWM_ROBCO_SRV/RobotSet/?$top=1",
+            robot = self.client.get("/odata/SAP/ZEWM_ROBCO_SRV/\
+                RobotSet/?$top=1",
                                     auth=(odataUser, odataPasswd)).json()
             robot = json.loads(json.dumps(robot))['d']['results'][0]
-            self.client.delete("/odata/SAP/ZEWM_ROBCO_SRV/RobotSet(Lgnum='0815',Rsrc='Isaac')",
+            self.client.delete("/odata/SAP/ZEWM_ROBCO_SRV/\
+            RobotSet(Lgnum='0815',Rsrc='Isaac')",
                                auth=(odataUser, odataPasswd), json=robot)

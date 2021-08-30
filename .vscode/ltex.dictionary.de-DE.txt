@@ -13,3 +13,8 @@ Platform
 containerisierten
 OData
 Mocha
+SetRobotStatus
+caption
+captionpos
+Function
+cURL

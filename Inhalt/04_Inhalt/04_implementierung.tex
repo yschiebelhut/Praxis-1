@@ -11,8 +11,8 @@ Allerdings tritt an dieser Stelle sowohl das Problem auf, dass node-ui5 kaum dok
 
 \subsection{Grundgerüst des Mock Servers}
 \label{subsec:foundation}
-Für das Node-Projekt wird zunächst die folgende package.json (\autoref{code:basic-ms-package.json}) angelegt.
-Hier wird zunächst ein Projektname mit Versionsnummer und Kurzbeschreibung angelegt, sowie in Zeile 5 der Einstiegspunkt für die Applikation definiert.
+Für das Node-Projekt wird zunächst die folgende package.json Datei (\autoref{code:basic-ms-package.json}) erstellt.
+Hier wird ein Projektname mit Versionsnummer und Kurzbeschreibung angelegt, sowie in Zeile 5 der Einstiegspunkt für die Applikation definiert.
 Die drei, in Zeile 6 folgende festgelegten, Projekt-Abhängigkeiten stellen hier allerdings den primär wichtigen Teil dar.
 Das \enquote{body-parser}-Paket wird dafür benötigt, um den Inhalt von Anfragen an den Server sauber verarbeiten zu können.
 Mit den hauseigenen Bibliotheken von Node.js ist zwar die Erstellung von Webservern bereits möglich, dieser Prozess wird jedoch vom \enquote{Express}-Framework stark vereinfacht.
@@ -29,8 +29,8 @@ Mithilfe der hier definierten Abhängigkeiten, muss nun lediglich noch \emph{npm
 Nachfolgend wir in \autoref{code:basic-ms-mockserver.js} der Quellcode der mockserver.js dargestellt.
 Beginnend muss node-ui5 eingebunden werden (Zeile 1).
 Dies geschieht hier unter Verwendung der mitgelieferten \enquote{factory}, die einige Konfigurationsschritte beim Einbinden direkt übernimmt.
-Parameter, die sie dabei berücksichtigen soll, werden in den folgenden 3 Zeilen gesetzt, unter anderem die Variable myApp, als Referenz auf das Verzeichnis, in dem die mockserver.js liegt.
-Nachdem node-ui5 in Node eingebunden wurde, wird nun der gesamte folgende Code als Callback-Funktion der Einbindung ausgeführt.
+Parameter, die sie dabei berücksichtigen soll, werden in den folgenden 3 Zeilen gesetzt, unter anderem die Variable \emph{myApp}, als Referenz auf das Verzeichnis, in dem die mockserver.js liegt.
+Nachdem node-ui5 in Node.js eingebunden wurde, wird nun der gesamte folgende Code als Callback-Funktion der Einbindung ausgeführt.
 So enthält Zeile 7 bereits SAPUI-Code, welcher weitere SAPUI-Module einbindet (hier MockServer), welche in Zeile 9 einer anschließend automatisch ausgeführten Funktion übergeben werden.
 
 \paragraph{Konfiguration des Mock Servers}
@@ -58,32 +58,32 @@ Letztere wird anschließend noch mit dem Status-Code der \ac{AJAX}-Response vers
 ]{Quellcode/basic-ms/mockserver.js}
 
 \subsection{Function Imports}
-Zum aktuellen Zeitpunkt ist es bereits gelungen, einen lauffähigen OData-Service zu errichten, welcher externe Anfragen beantwortet.
+Zum aktuellen Zeitpunkt ist es bereits gelungen, einen lauffähigen \ac{OData}-Service zu errichten, welcher externe Anfragen beantwortet.
 Damit dieser nun als neuer \ac{ewm-sim} dienen kann, muss er allerdings zunächst mit den richtigen Mockdaten versorgt werden.
-Zu diesem Zweck muss dem Server über die \emph{metadata.xml} mitgeteilt werden, wie die Datenstrukturen und Zusammenhänge zwischen diesen aussehen, die er darstellen soll.
+Zu diesem Zweck muss dem Server über die \emph{metadata.xml} Datei mitgeteilt werden, wie die Datenstrukturen und Zusammenhänge zwischen diesen aussehen, die er darstellen soll.
 Da der \ac{ewm-sim} eine genaue Nachbildung eines vollständigen \ac{EWM}-Systems sein soll, sind auch die Metadaten mit einem solchen übereinstimmend.
 Infolge dessen kann die \emph{metadata.xml} ohne Veränderungen direkt von einem bestehenden \ac{EWM}-System übernommen werden.
 Auch die darzustellenden Mockdaten haben noch dieselbe Struktur wie beim \ac{ewm-sim} in der ersten Version.
 Um Mock- und Metadaten zu verändern, müssen die jeweiligen Dateien lediglich in die entsprechenden Verzeichnisse gelegt werden, welche in \autoref{subsec:foundation} konfiguriert wurden.
-\todo{Code von Meta- und Mockdaten einfügen?}
+% \todo{Code von Meta- und Mockdaten einfügen?}
 
 In den Metadaten werden für den vollständigen Funktionsumfang des Mock Servers jedoch überdies noch Function Imports definiert.
 Diese Funktionen stellen Anfragen dar, welche erweiterte Operationen beim Server auslösen, als ausschließlich einen Datensatz zu liefern oder zu manipulieren.
 Für die normalen Mockdaten benötigt der Server nicht mehr als die Daten und den entsprechenden Eintrag in den Metadaten.
-Bei Function Imports funktioniert das nicht so einfach, hier ist in den Metadaten lediglich festgelegt, dass eine solche Funktion zu existieren hat, auf welche \ac{HTTP}-Methode diese zu reagieren hat, welche Parameter sie entgegennimmt und was sie für einen Wertetyp zurückliefert.
+Bei Function Imports funktioniert das nicht so einfach, hier ist in den Metadaten lediglich festgelegt, dass eine solche Funktion zu existieren hat, auf welche \ac{HTTP}-Methode diese reagiert, welche Parameter sie entgegennimmt und welchen Wertetyp sie zurückliefert.
 Die eigentliche Funktionalität muss jedoch für jede Funktion einzeln von Hand implementiert werden.
 Wie solch eine Implementierung aussieht, soll hier am Beispiel der Funktion \emph{SetRobotStatus} gezeigt werden.
 
 \lstinputlisting[
 	language=xml,
 	label=code:metadata-setrobotstatus,
-	caption=Metadaten der Funktion SerRobotStatus,
+	caption=Metadaten der Funktion SetRobotStatus,
 	captionpos=b
 ]{Quellcode/setrobotstatus.xml}
 
 In \autoref{code:metadata-setrobotstatus} ist der für die Funktion relevante Ausschnitt aus der \emph{metadata.xml} zu sehen.
 Diesem kann entnommen werden, dass sich die Operation der Funktion auf das \enquote{RobotSet} bezieht und die Funktion auf \ac{HTTP}-POST-Anfragen reagieren soll.
-Die Funktion erwartet drei Parameter (Lgnum, Rsrc, Exccode) vom Typ String mit einer jeweils festgelegten, maximalen Länge.
+Die Funktion erwartet drei Eingabeparameter (Lgnum, Rsrc, Exccode) vom Typ String mit einer jeweils festgelegten, maximalen Länge.
 
 Um jedoch den genauen Ablauf der Funktion im Mock Server implementieren zu können, muss die Implementierung aus dem ABAP-Backend eines richtigen \ac{EWM}-Systems analysiert und in Node.js portiert werden.
 Dies ist überdies wichtig, da die importierten Funktionen bestimmte Fehlercodes zurückliefern, die für den Betrieb der Roboter ebenfalls essenziell sind.
@@ -97,12 +97,12 @@ Dies ist überdies wichtig, da die importierten Funktionen bestimmte Fehlercodes
 
 \autoref{fig:gwse} zeigt einen Ausschnitt aus dem \emph{SAP Gateway Service Builder}.
 (Vollständige Screenshots werden aus Gründen der Lesbarkeit nicht dargestellt.)
-Empfängt der OData-Service den Aufruf von \emph{SetRobotStatus}, ruft er intern im Backend die Funktion \emph{ZSET\_ROBOT\_STATUS} mit den mitgegebenen Parametern auf.
+Empfängt der \ac{OData}-Service den Aufruf von \emph{SetRobotStatus}, ruft er intern im Backend die Funktion \emph{ZSET\_ROBOT\_STATUS} mit den mitgegebenen Parametern auf.
 Die Funktion kann zwei klar definierte und eine sonstige Exception zurückliefern.
-Diese Exceptions werden Exitcodes zugeordnet und anschließend wird eine Fallentscheidung anhand dieser Rückgabewerte durchgeführt.
-Kommt es beispielsweise zur \emph{robot\_not\_found}-Exception, so wird vom OData-Service eine Antwort mit dem \ac{HTTP}-Statuscode \emph{404} zurückgegeben.
+Diesen Exceptions werden Exitcodes zugeordnet und anschließend wird eine Fallentscheidung anhand dieser Rückgabewerte durchgeführt.
+Kommt es beispielsweise zur \emph{robot\_not\_found}-Exception, so wird vom \ac{OData}-Service eine Antwort mit dem \ac{HTTP}-Statuscode \emph{404} zurückgegeben.
 Der Nachrichteninhalt wird durch die Konstante \emph{gc\_error\_rnf} festgelegt.
-Um von dieser den eigentlichen Wert abzurufen, muss im Class Builder (\autoref{fig:class-builder}) nachgeschlagen werden.
+Um von dieser den eigentlichen Wert abzurufen, muss er im Class Builder (\autoref{fig:class-builder}) nachgeschlagen werden.
 Dort steht zu jeder Konstante (Attribute) der zugehörige Wert des Fehlercodes (Initial Value).
 
 \begin{figure}[!ht]
@@ -127,7 +127,7 @@ Hat der übergebene Code jedoch die richtige Länge, wird erneut eine Anfrage an
 Dieses Mal wird jedoch keine GET-Request geschickt, sondern mittels PUT-Request die Daten eines bestehenden Datensatzes bearbeitet.
 (Durch die vorangegangene Abfrage ist sicher bekannt, dass der angefragte Roboter existiert, sonst würde diese Codestelle gar nicht ausgeführt.)
 Als Payload werden schlicht und einfach die URL-Parameter in \ac{JSON}-Form verwendet.
-Wird diese Anfrage erfolgreich abgeschlossen, wird die externe Anfrage mit \emph{200 OK} Status quittiert, andernfalls liegt ein weiterer Fehler vor.
+Wird diese Anfrage erfolgreich abgeschlossen, wird die externe Anfrage mit dem Status \emph{200 OK} quittiert, andernfalls liegt ein weiterer Fehler vor.
 Im \emph{SAP Gateway Service Builder} ist nur ein weiterer Fehlertyp vorgesehen.
 Da der Roboter an dieser Stelle erwiesenermaßen existiert, liegt nun also der \emph{ROBOT\_STATUS\_NOT\_SET}-Fehler vor.
 Dieser Fehler wird ebenfalls zurückgegeben, falls der gewünschte Status länger als die maximal erlaubte Länge sein sollte und ebenfalls in sonstigen Fehlerfällen.
@@ -155,7 +155,7 @@ Abschließend müssen die modifizierten Request Handler noch erneut dem Mock Ser
 
 
 \subsection{Authentifizierung}
-Die OData-Schnittstelle des \ac{ewm-sim} ist dafür vorgesehen, innerhalb eines Netzwerks freigegeben zu werden.
+Die \ac{OData}-Schnittstelle des \ac{ewm-sim} ist dafür vorgesehen, innerhalb eines Netzwerks freigegeben zu werden.
 Im aktuellen Zustand wäre jeder Client in diesem Netzwerk in der Lage, nicht nur Daten von dieser Schnittstelle anzufragen, sondern diese dort auch zu manipulieren, wodurch der ordnungsgemäße Betrieb des \ac{ewm-sim} gestört werden kann.
 Aus diesem Grund ist es sinnvoll, eine Authentifizierung einzubauen, die den bislang offenen Zugriff beschränkt.
 Eine simple und verbreitete Methode hierfür ist \ac{HTTP}-Authentifizierung, welche, wie der Name schon sagt, direkt in \ac{HTTP} integriert ist.
@@ -190,12 +190,12 @@ Eines der am weitesten verbreiteten ist \emph{Mocha} (verfügbar als \ac{npm}-Mo
 Beides in Betracht ziehend fiel auch für die neue Version des \ac{ewm-sim} die Wahl auf Mocha, sodass auch einige bereits bestehende Tests übernommen werden konnten.
 Mocha-Tests werden einfach als normale JavaScript-Datei geschrieben und in einem \enquote{test} genannten Ordner im Projektwurzelverzeichnis abgelegt.
 
-\autoref{code:tests} zeigt beispielhaften Inhalt dieser Datei.
-Da die Tests automatisiert laufen sollen, muss bei deren Ausführung der Mock Server ebenfalls automatisch gestartet und wieder gestoppt werden, was auch die Konfiguration der Umgebungsvariablen inkludiert und in den ersten drei Zeilen vorgenommen wird.
+\autoref{code:tests} zeigt einen beispielhaften Ausschnitt des Inhalts dieser Datei.
+Da die Tests automatisiert laufen sollen, muss bei deren Durchführung der Mock Server ebenfalls automatisch gestartet und wieder gestoppt werden, was auch die Konfiguration der Umgebungsvariablen inkludiert, welche in den ersten drei Zeilen vorgenommen wird.
 In den Zeilen 5-7 werden für die Testdurchführung benötigte Bibliotheken geladen.
 Dies sind zum einen der Mock Server, eine weitere Bibliothek, die bei der Beschreibung der Testfälle benötigt wird, sowie eine aus dem ersten \ac{ewm-sim} übernommene Hilfsbibliothek, um einfach Anfragen an den Testserver schicken zu können.
 Anschließend folgen die eigentlichen Tests.
-Testfälle in Mocha sind entfernt einer natürlichen Sprache nachempfunden.
+Testfälle in Mocha sind entfernt dem Aufbau einer natürlichen Sprache nachempfunden.
 Somit wird ein Testset mit dem Schlüsselwort \emph{\enquote{describe}} (dt. \enquote{beschreibe}) und einer menschenlesbaren Kurzbeschreibung der nachfolgenden Tests eingeleitet (Zeile 9).
 Da es für automatisierte Tests üblich ist, dass gewisse Schritte vor und nach der Ausführung eines bestimmten Testfalls durchgeführt werden müssen, bringt Mocha für solches eigene Funktionen (\emph{before} und \emph{after}) mit.
 Für den vorliegenden Test erfolgt in der \emph{before}-Funktion der Startvorgang des Mock Servers.
@@ -219,7 +219,7 @@ Aufgrund von Artefakten, die beim Generieren der Node-Module entstehen, muss hie
 In \autoref{code:Dockerfile-ewm-sim} ist das entsprechende Dockerfile zu sehen.
 Die erste Buildstufe wird in den Zeilen 1-5 durchlaufen.
 Hierbei werden die \emph{package.json} sowie die \emph{package-lock.json} in das Arbeitsverzeichnis kopiert und dort mittels \ac{npm} die referenzierten Pakete generiert und installiert.
-Anschließend wird die Buildstufe (Zeilen 7-11) gestartet.
+Anschließend wird die zweite Buildstufe (Zeilen 7-11) gestartet.
 Dort werden die restlichen Projektdateien in das eigentliche Containerimage kopiert und anschließend das während der ersten Buildstufe aufgebaute Node-Modulverzeichnis aus dem ersten, temporären Image in das Zielimage kopiert.
 Abschließend folgt noch die standardmäßige Freigabe des Ports \emph{8080} für den Webserver (dieser Port kann auch später noch über die Kommandozeile zur Laufzeit angepasst werden) und die Festlegung der Server-Kommandozeile, welche beim Dockerstart ausgeführt werden soll, um auch den Server hochzufahren.
 
@@ -232,7 +232,7 @@ Abschließend folgt noch die standardmäßige Freigabe des Ports \emph{8080} fü
 
 \section{Automatisierte Tests mit Travis CI}
 Wie in \autoref{sec:travis-desc} beschrieben, ist Travis CI ein häufig verwendeter Dienst, um Modultests automatisiert ausführen zu lassen, wenn der Code im Online-Repository aktualisiert wird und somit die Integrität der Software zu gewährleisten.
-Für dieses Projekt wurde Travis-CI.org (inzwischen zugunsten der neuen Version Travis-CI.com eingestellte Variante) verwendet.
+Für dieses Projekt wurde Travis-CI.org (eine inzwischen zugunsten der neuen Version Travis-CI.com eingestellte Variante) verwendet.
 Um Tests für ein GitHub-Repository in Travis CI einzurichten, müssen zwei Dinge erledigt werden.
 Zum einen muss eine Registrierung mit dem GitHub-Account, dem das Repository gehört, auf der Website von Travis CI erfolgen.
 Hierbei erteilt man dem Dienst Zugriffsberechtigungen für die dem Account zugehörigen Repositories.
@@ -244,8 +244,8 @@ In \autoref{code:travis.yml} ist die Konfigurationsdatei für den \ac{ewm-sim} z
 Hier wird zunächst festgelegt, in welcher Programmiersprache das Projekt geschrieben wurde und welche Version der Sprache zu verwenden ist (Zeilen 1-3).
 Die \emph{install}-Sektion in Zeile 4 definiert, welche Kommandos zur Vorbereitung der Testumgebung ausgeführt werden müssen.
 Im konkreten Fall müssen beispielsweise die Abhängigkeiten des Node-Servers installiert werden (Zeile 5).
-Es können auch weitere Hook festgelegt werden, so zum Beispiel der in Zeile 6 aufgeführte \emph{after\_success}-Hook, der nach einer erfolgreichen Ausführung des Tests angewandt wird.
-Hier wird nach dem Test noch die \enquote{Coverage} (dt. Abdeckung) bestimmt (Zeile 7).
+Es können auch weitere Hook festgelegt werden, so zum Beispiel der in Zeile 6 aufgeführte \emph{after\_success}-Hook, der nach einer erfolgreichen Ausführung der Tests angewandt wird.
+Hier wird nach den Tests noch die \enquote{Coverage} (dt. Abdeckung) bestimmt (Zeile 7).
 Diese gibt an, wie groß der Anteil des Quellcodes ist, welcher von den Tests abgedeckt wird.
 Eine geringe Coverage kann somit darauf hindeuten, dass nicht ausreichend Testfälle definiert wurden, um das korrekte Verhalten der Applikation zu verifizieren.
 Ebenfalls in der Konfigurationsdatei festgelegt werden Benachrichtigungen (Zeile 8 fort folgende).
@@ -258,5 +258,5 @@ Für den \ac{ewm-sim} wurde dort eine E-Mail-Adresse angegeben, die im Falle von
 ]{Quellcode/travis.yml}
 
 
-\section{Deployment in \ac{GKE}}
-\todo{mach ich das überhaupt noch?..}
+% \section{Deployment in \ac{GKE}}
+% \todo{mach ich das überhaupt noch?..}

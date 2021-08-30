@@ -1,5 +1,5 @@
 \chapter{Theoretische Grundlagen}
-Zur Bearbeitung dieses Projekts wurden einige Technologien eingesetzt, für die hier zunächst Vor- und Nachteile sowie theoretische Grundlagen aufgeführt werden sollen.
+Im Rahmen der Bearbeitung dieses Projekts wurden einige Technologien eingesetzt, für die hier zunächst Vor- und Nachteile sowie theoretische Grundlagen aufgeführt werden sollen.
 Falls eine Entscheidung für eine entsprechende Technologie getroffen werden musste, soll diese anhand der erläuterten Kriterien nachvollziehbar dargelegt werden.
 
 \section{Docker}
@@ -7,7 +7,7 @@ Falls eine Entscheidung für eine entsprechende Technologie getroffen werden mus
 Docker ist eine freie Implementierung des Konzepts der Containervirtualisierung.
 Ein sogenannter Docker Container ist plattformübergreifend lauffähig.
 Voraussetzung ist lediglich, dass der Docker Daemon auf dem Host-System installiert ist und im Hintergrund ausgeführt wird.
-Damit die Container, wie beschrieben, auf alles großen Betriebssystemen laufen können, setzen sie üblicherweise auf Linux auf.
+Damit die Container, wie beschrieben, auf allen verbreiteten Betriebssystemen laufen können, setzen sie üblicherweise auf Linux auf.
 Somit wird unter Windows das \ac{WSL} genutzt, um die Container auszuführen.
 Dies ist eine schlanke Integration des Linux-Kernels in das Windows-Betriebssystem, welche durch Optimierung und Reduktion auf essenzielle Bestandteile den deutlich größeren Overhead von herkömmlicher Virtualisierung erspart.~\cite{wsl}
 
@@ -23,7 +23,7 @@ Die angestrebte Anwendung als Docker Container zu konzipieren ist neben den oben
 Somit kann bei entsprechender Umsetzung eine identische oder zumindest sehr ähnliche Schnittstelle zur Anbindung an die anderen Softwarekomponenten des Projektes genutzt werden und Umweltfaktoren, die einen reibungslosen Betrieb verhindern würden, sind von vorneherein ausgeschlossen.
 
 \section{Kubernetes}
-Wie in \ref{docker} beschrieben, können mithilfe von Containern leicht Applikationen in einer neuen Umgebung eingerichtet werden.
+Wie in \autoref{docker} beschrieben, können mithilfe von Containern leicht Applikationen in einer neuen Umgebung eingerichtet werden.
 Kubernetes stellt eine quelloffene Option zur erleichterten und automatisierten Verwaltung von containerisierten Services dar.
 Dabei wird von Kubernetes ein deklarativer Ansatz verfolgt.
 Das bedeutet: Der Nutzer beschreibt den gewünschten Zustand -- zum Beispiel über Konfigurationsdateien oder die Konsole -- und Kubernetes ermittelt selbstständig die Schritte, die zur Erreichung und Aufrechterhaltung notwendig sind.
@@ -43,10 +43,11 @@ Dies geschieht normalerweise in Form von virtuellen Servern, deren Spezifikation
 Somit ist es möglich, auch für kurze Projekte eine größere Infrastruktur zu deployen oder bei Bedarf und mithilfe der Skalierungsmöglichkeit von Kubernetes mit wenigen Klicks die Ressourcen einer Anwendung beziehungsweise eines Clusters anzupassen.
 Weiterhin ist es vorteilhaft, dass nur für die tatsächlich genutzte Rechenzeit und -last gezahlt werden muss.
 Google ist mit \ac{GKE} einer der größeren Anbieter von Kubernetes Clustern.~\cite{gke}
-Die Entwicklungsabteilung, im Rahmen derer dieses Projekt entwickelt wird, nutzt \ac{GKE}, um dort dynamisch Testumgebungen aufbauen zu können.
+Die Entwicklungsabteilung, im Rahmen derer dieses Projekt entwickelt wird, nutzt \ac{GKE}, um dort dynamisch Testumgebungen aufbauen zu können, weshalb ein Grundverständnis von Kubernetes zur Bearbeitung des Projekts von Vorteil ist.
+Da die neue Version des \ac{ewm-sim} erneut als Docker erstellt werden soll, sollte sie ebenfalls ohne große Anpassungen der Konfiguration den Platz der alten Implementation im Cloud Cluster einnehmen können.
 
 \section{Node.js}
-Seit der ursprünglichen Einführung im Jahre 1995 hat die interpretierte Skriptsprache \enquote{JavaScript} rasch an Beliebtheit und Bedeutung gewonnen.
+Seit ihrer ursprünglichen Einführung im Jahre 1995 hat die interpretierte Skriptsprache \emph{JavaScript} rasch an Beliebtheit und Bedeutung gewonnen.
 Heutzutage ist sie aus der Web-Entwicklung nicht mehr wegzudenken.
 Node.js stellt eine Möglichkeit dar, mithilfe derer JavaScript nicht mehr nur clientseitig im Browser, sondern auch serverseitig ausgeführt werden kann.
 Ein großer Vorteil davon liegt darin, dass Web-Entwickler, die bereits viel mit JavaScript arbeiten und dementsprechend damit vertraut sind, nur noch eine Sprache benötigen, um sowohl Frontend als auch Backend zu entwickeln.
@@ -58,26 +59,26 @@ Eine weitere nützliche Funktionalität von Node.js ist der \acl{npm}.
 Mit ihm können sehr einfach von der Community erstellte Bibliotheken installiert und in ein Programm eingebunden werden.
 Auf diese Weise stehen beispielsweise fertige Frameworks für Web-Server, Unit-Tests oder Logger  mit erweiterter Funktionalität zur Verfügung.
 \ac{npm} hilft außerdem bei der strukturierten Verwaltung eines Node.js Projektes.
-Er stellt einen Assistenten bereit, um automatisiert eine sogenannte \code{package.json} zu generieren und auf das Projekt anzupassen.
+Er stellt einen Assistenten bereit, um automatisiert eine sogenannte \emph{package.json} zu generieren und auf das Projekt anzupassen.
 In ihr werden grundlegende Eigenschaften des Projektes verzeichnet, so zum Beispiel
 \begin{itemize}
-	\item Name
-	\item Beschreibung
-	\item kennzeichnende Schlüsselwörter
-	\item Lizenzen
-	\item Autoren und Mitwirkende
+	\item Name,
+	\item Beschreibung,
+	\item kennzeichnende Schlüsselwörter,
+	\item Lizenzen,
+	\item Autoren und Mitwirkende,
 	\item Projektwebseite und
 	\item Quellcode-Repository.
 \end{itemize}
 Darüber hinaus werden hier allerdings auch die mit \ac{npm} installierten Pakete inklusive deren Versionsnummer gespeichert, welche wiederum noch in allgemeine Abhängigkeiten und solche, die nur zu Entwicklungszwecken vonnöten sind, untergliedert werden.
-Möchte jemand anders das Projekt weiterentwickeln oder ein Deployment durchführen, so kann mithilfe von \code{npm install} im Handumdrehen die entsprechende Laufzeitumgebung dafür schaffen und Abhängigkeiten befriedigen.
-Des Weiteren können in der \code{package.json} auch Skripte festgelegt werden, die ein einfaches Ausführen, Testen oder Bauen des Projektes, sowie ähnliche Aufgaben ermöglichen.~\cite{package.json}
+Möchte jemand anders das Projekt weiterentwickeln oder ein Deployment durchführen, so können mithilfe von \emph{npm install} im Handumdrehen die entsprechende Laufzeitumgebung dafür geschaffen und Abhängigkeiten befriedigen werden.
+Des Weiteren können in der package.json auch Skripte festgelegt werden, die ein einfaches Ausführen, Testen oder Bauen des Projektes, sowie ähnliche Aufgaben ermöglichen.~\cite{package.json}
 
 Die Wahl der zu verwendenden Programmiersprache fiel aus verschiedenen Gründen auf Node.js.
 Zunächst muss betrachtet werden, dass die simple Skriptsprache Node.js genau für den Einsatzzweck der serverseitigen Entwicklung konzeptioniert wurde.
 Weiterhin ist der SAPUI5 Mock Server selbst in JavaScript geschrieben.
 Mithilfe von einigen bereits existierenden \ac{npm}-Modulen ist somit eine sehr einfache Integration mit den bereits vorhandenen Softwarekomponenten möglich.
-Auf Docker Hub existiert außerdem eine breite Auswahl an vorgefertigten Images für Node.js Umgebungen, sodass kein eigenständiges Containerimage von Grund auf hochgezogen werden muss.
+Auf Docker Hub existiert außerdem eine breite Auswahl an vorgefertigten Images für Node.js-Umgebungen, sodass kein eigenständiges Containerimage von Grund auf hochgezogen werden muss.
 
 
 \section{Postman}
@@ -85,32 +86,33 @@ Bei der Entwicklung eines Web-Servers ist es zu Testzwecken hilfreich, um nicht 
 Ganz grundlegende Anfragen können schon durch einen Web-Browser abgesetzt werden.
 Genau dies geschieht beim Aufruf jeder Website.
 Diese einfach im Browser abzusetzenden Anfragen stoßen jedoch schnell an ihre Grenzen, weshalb ein Programm mit erweitertem Funktionsumfang benötigt wird, bei dem detailliert Einfluss auf die Parameter von Requests genommen werden kann.
-Zunächst kommt ein einfaches und auf vielen Systemen bereits vorinstalliertes Programm, welches einen solchen Funktionsumfang unterstützt, in den Sinn: \emph{CURL}.
-Das konsolenbasierte Tool bietet allerdings keine Möglichkeit, Requests für spätere Verwendung zu speichern und erfordert mitunter die komplexe Kombination von Parametern, um das gewünschte Ergebnis zu erzielen.
+Zunächst kommt ein einfaches und auf vielen Systemen bereits vorinstalliertes Programm in den Sinn, welches einen solchen Funktionsumfang unterstützt: \emph{cURL}.
+Das konsolenbasierte Tool bietet allerdings keine Möglichkeit, Requests für spätere Verwendung zu speichern und erfordert mitunter eine komplexe Kombination von Parametern, um das gewünschte Ergebnis zu erzielen.
 Anstelle dessen bietet sich Postman an.
-Das Programm stellt eine Lösung für alle oben beschriebenen Probleme von \emph{CURL} dar.
+Das Programm stellt eine Lösung für alle oben beschriebenen Probleme von cURL dar.
 Es bietet eine übersichtliche Oberfläche, um die einzelnen Eigenschaften einer \ac{HTTP}-Request bis ins kleinste Detail zu konfigurieren und ermöglicht es auch, diese zu speichern.
 Zur späteren Verwendung gespeicherte Anfragen können in Ordnern organisiert, mit einem Account synchronisiert oder auch als \emph{Collection} im \ac{JSON}-Format zum Austausch mit Mitarbeitern exportiert werden.
 
 \section{Git}
-Git ist ein quelloffenes Tool zur Versionsverwaltung, welches ursprünglich von Linus Torvalds zur Entwicklung des Linux-Kernels geschrieben wurde.
+Git ist ein quelloffenes Tool zur Versionsverwaltung, welches ursprünglich von Linus Torvalds zur Entwicklung des Linux-Kernels geschrieben wurde.~\cite{vetter.2019}
 Die klassische Bedienung erfolgt über die Kommandozeile.
 Mittlerweile gibt es aber auch einige grafische Bedienungsoberflächen, zudem wurde Git direkt in die gängigsten Entwicklungsumgebungen integriert.
-Dateien werden in sogenannten Repositories verwaltet, welchen sie durch einen \emph{Commit} hinzugefügt oder aktualisiert werden.
-In einem Repository kann es zudem beliebig viele \emph{Branches} geben, zwischen denen flexibel gewechselt werden kann.
-Die Dateien eines Branches sind unabhängig, d. h. es kann zum Beispiel einen Hauptbranch geben, auf dem der stabile Stand des Codes geführt wird und einen, auf dem ein neues Feature entwickelt wird.
+Dateien werden in sogenannten Repositories verwaltet, welchen sie durch einen \emph{Commit} hinzugefügt oder in diesen aktualisiert werden.
+In einem Repository kann es zudem beliebig viele \emph{Branches} geben, zwischen denen flexibele Wechsel möglich sind.
+Die Dateien eines Branches sind unabhängig, \dash es kann zum Beispiel einen Hauptbranch geben, auf dem der stabile Stand des Codes geführt wird und einen, auf dem ein neues Feature entwickelt wird.
 Branches können durch \emph{mergen} ineinander überführt werden.
 Dies geschieht weitestgehend automatisch, es kann jedoch dabei auch zu Konflikten kommen.
 Beispielsweise kann dieser Fall eintreten, wenn dieselbe Zeile einer Datei in beiden Branches bearbeitet wurde.
 In dieser Situation muss dann manuell interveniert und der Konflikt beseitigt werden.
 Die Zustände des Quellcodes werden zum Zeitpunkt des jeweiligen Commits gespeichert und sind auch nachträglich noch einsehbar.
-So können neu hinzugekommene Fehler einfach mittels Rollbacks behoben werden.
+So können neu hinzugekommene Fehler einfach mittels Rollbacks behoben werden.~\cite{dudler}
 
 \paragraph{GitHub}
 Eine große Stärke von Git ist die Möglichkeit zur einfachen Kollaboration.
 Hierfür muss ein Repository auf einem Server liegen, von dem aktuelle Änderungen auf den lokalen Rechner heruntergeladen (pull) oder veröffentlicht werden können (push).
 GitHub ist einer der größten Anbieter für das Hosting von Git-Repositories und bietet auf der Website noch zahlreiche weitere Möglichkeiten zum Management und der Dokumentation von Projekten.
-Hierzu gehören zum Beispiel ein in das Projekt integriertes Wiki, ein Tracker für Probleme (Issues), Statistiken zum Projekt und \emph{Pull Requests} -- ein Feature um Änderungen am Code anderer vorzuschlagen, auf den keine direkten Schreibrechte existieren.
+Hierzu gehören zum Beispiel ein in das Projekt integriertes Wiki, ein Tracker für Probleme (Issues), Statistiken zum Projekt und \emph{Pull Requests} -- ein Feature um Änderungen am Code anderer vorzuschlagen, auf den keine direkten Schreibrechte existieren.~\cite{github.doc}
+\ac{EWM} Cloud Robotics ist vollständig quelloffen und wird auf GitHub öffentlich verwaltet.
 
 \section{Travis CI}
 \label{sec:travis-desc}
@@ -120,7 +122,7 @@ In einer Konfigurationsdatei, die im Projektverzeichnis liegt, werden alle Randb
 Auch komplexere Abläufe, wie das Kompilieren von mehrschrittigen Builds oder parallelisierte Operationen, können mit Travis CI umgesetzt werden.
 Der Dienst wird automatisch aktiv, wenn beispielsweise neuer Code auf einem GitHub-Repository hochgeladen wird.
 Die Resultate der Tests können dann entweder auf der Website von Travis CI eingesehen werden oder auch als automatisch generierte Badge im Readme des GitHub-Repositorys oder auf der Projektwebsite eingebunden werden.
-Des Weiteren kann eine Benachrichtigung per E-Mail konfiguriert werden, sodass der für das Projekt verantwortliche direkte Rückmeldung darüber erhält, wenn etwas nach einem Update nicht mehr funktionsfähig sein sollte.
+Des Weiteren kann eine Benachrichtigung per E-Mail konfiguriert werden, sodass der für das Projekt verantwortliche direkte Rückmeldung darüber erhält, wenn etwas nach einem Update nicht mehr funktionsfähig sein sollte.~\cite{travis}
 
 Travis CI ist eine gute und beliebte Möglichkeit, die Integrität des eigenen Codes zu garantieren.
 Allein deshalb schon sollte sie bei diesem Projekt zum Einsatz kommen.
@@ -132,4 +134,4 @@ Dort findet Jira als Planungssoftware Verwendung.
 Sie erlaubt die Definition von Backlog-Items mit dazugehörigen Sub-Tasks, welche in Sprints verwaltet werden.
 In einem aktiven Sprint können mit wenigen Klicks Aufgaben einem Teammitglied zugewiesen oder neue Sub-Tasks erstellt werden.
 Die Hauptansicht zur Verwaltung ist in drei Spalten gegliedert, welche den aktuellen Status anzeigen: \emph{To Do}, \emph{In Progress} und \emph{Done}.
-Zwischen Spalten hin und her geschoben werden Elemente eines Sprints bequem per Drag and Drop.
+Zwischen Spalten hin und her geschoben werden Elemente eines Sprints bequem per Drag and Drop.~\cite{jira}
