@@ -158,7 +158,7 @@ Abschließend müssen die modifizierten Request Handler noch erneut dem Mock Ser
 Die \ac{OData}-Schnittstelle des \ac{ewm-sim} ist dafür vorgesehen, innerhalb eines Netzwerks freigegeben zu werden.
 Im aktuellen Zustand wäre jeder Client in diesem Netzwerk in der Lage, nicht nur Daten von dieser Schnittstelle anzufragen, sondern diese dort auch zu manipulieren, wodurch der ordnungsgemäße Betrieb des \ac{ewm-sim} gestört werden kann.
 Aus diesem Grund ist es sinnvoll, eine Authentifizierung einzubauen, die den bislang offenen Zugriff beschränkt.
-Eine simple und verbreitete Methode hierfür ist \ac{HTTP}-Authentifizierung, welche, wie der Name schon sagt, direkt in \ac{HTTP} integriert ist.
+Eine simple und verbreitete Methode hierfür ist \ac{HTTP}-Basisauthentifizierung, welche, wie der Name schon sagt, direkt in \ac{HTTP} integriert ist.
 Um einen Express-Server mit dieser Art der Authentifizierung zu sichern, wird lediglich ein weiteres \ac{npm}-Modul benötigt -- \emph{express-basic-auth}.~\cite{auth-npm, auth-tutorial}
 Des Weiteren muss die \emph{mockserver.js} um den in \autoref{code:basic-auth} dargestellten Code erweitert werden.
 Zunächst wird hier das Modul in den Quellcode importiert (Zeile 1).
@@ -166,13 +166,13 @@ Es folgt eine Fallunterscheidung, welche überprüft, ob Zugangsdaten für den S
 Wie im Umfeld von Containeranwendungen üblich, werden die zu nutzenden Zugangsdaten nicht in den Quellcode integriert, sondern zum Zeitpunkt des Ausführens mittels Umgebungsvariablen festgelegt.
 Dies sorgt zum einen dafür, dass für ein Ändern der Zugangsdaten nicht der Quellcode bearbeitet werden muss, zum anderen ist es somit auch unmöglich, den Server mit Standard-Anmeldedaten zu betreiben, was ein großes Sicherheitsmanko darstellen würde.
 Wurden keine Zugangsdaten per Umgebungsvariable gesetzt, bricht der Server den Start ab (Zeilen 11-13).
-Andernfalls wird in Zeilen 4-8 die \ac{HTTP}-Authentifizierung initialisiert.
+Andernfalls wird in Zeilen 4-8 die \ac{HTTP}-Basisauthentifizierung initialisiert.
 Diese nutzt die \emph{safeCompare}-Methode der importierten Bibliothek, welche bereits gegen einige mögliche Arten von Attacken abgesichert ist, und vergleicht Nutzernamen und Passwort, die der Server bei einer Anfrage erhält, mit den in den Umgebungsvariablen festgelegten.
 Stimmen beide Wertepaare überein, wird \emph{true} zurückgegeben; die Authentifizierung war erfolgreich.
 
 \lstinputlisting[
 	label=code:basic-auth,
-	caption=Integration von HTTP-Authentifizierung in den Mock Server,
+	caption=Integration von \ac{HTTP}-Basisauthentifizierung in den Mock Server,
 	captionpos=b
 ]{Quellcode/basic-auth.js}
 
