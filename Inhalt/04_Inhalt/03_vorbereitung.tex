@@ -103,12 +103,12 @@ So existiert exemplarisch im \ac{ewm-sim} eine Funktion \enquote{GetNewRobotWare
 Auf Function Imports kann in einer Simulation keinesfalls verzichtet werden, da diese, wie am obigen Beispiel anschaulich zu erkennen, für essenzielle Funktionen benötigt werden.
 Die verfügbaren Module mussten somit zunächst noch alle auf die Möglichkeit untersucht werden, ob sie die Einrichtung von angepassten Function Imports unterstützen.
 
-Im Laufe der Tests präsentierten sich zwei Kandidaten, die zwar sehr angenehm über ein Kommandozeileninterface konfiguriert werden konnten und sogar persistente Speicherung unterstützten, jedoch erfüllte leider keines von beiden die Anforderung der Function Imports.
+Im Laufe der Tests präsentierten sich zwei Kandidaten (\emph{n-odata-server}\footnote{https://github.com/htammen/n-odata-server} und \emph{varkes}\footnote{https://github.com/kyma-incubator/varkes}), die zwar sehr angenehm über ein Kommandozeileninterface konfiguriert werden konnten und sogar persistente Speicherung unterstützten, jedoch erfüllte leider keines von beiden die Anforderung der Function Imports.
 Von den betrachteten Möglichkeiten konnten diese lediglich im SAP eigenen \emph{Mock Server} eingerichtet werden.
 
 \paragraph{\href{https://github.com/ArnaudBuchholz/node-ui5}{node-ui5}}
 Nun kann der Mock Server allerdings, wie in der Einleitung bereits erwähnt, nur in einer \emph{SAPUI5}-Umgebung ausgeführt werden.
-Mit dem \ac{npm}-Modul \emph{node-ui5} wurde eine Lösung, wie SAPUI5-Tools nicht nur clientseitig, sondern auch auf Node.js-Servern genutzt werden können, bereits vor einiger Zeit von dem kanadischen SAP-Entwickler Arnaud Buchholz entwickelt.
+Mit dem \ac{npm}-Modul \emph{node-ui5}\footnote{https://github.com/ArnaudBuchholz/node-ui5} wurde eine Lösung, wie SAPUI5-Tools nicht nur clientseitig, sondern auch auf Node.js-Servern genutzt werden können, bereits vor einiger Zeit von dem kanadischen SAP-Entwickler Arnaud Buchholz entwickelt.
 Grundlegend funktioniert dieses Modul ziemlich gut.
 Leider bringt es jedoch übliche Probleme solcher in Eigenregie entwickelter \enquote{Ein-Mann-Projekte} mit sich: Die Dokumentation ist nicht besonders ausführlich und zumeist sind andere Arbeitsaufgaben wichtiger, als das Aufspüren und beheben kleinerer Probleme.
 Diese Probleme stellten sich, wie zu erwarten, im Laufe des Projekts gelegentlich als kleinere oder größere Schwierigkeiten dar.
