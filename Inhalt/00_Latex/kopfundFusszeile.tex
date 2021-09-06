@@ -14,9 +14,11 @@
 \renewcommand*{\chaptermarkformat}{}            % Entfernt die Kapitelnummer
 \renewcommand*{\sectionmarkformat}{}            % Entfernt die Sectionnummer
 % Angaben [für "plain"]{für "scrheadings"}
-\ihead[]{\titelheader}                          % Kopfzeile links
+% \ihead[]{\titelheader}                          % Kopfzeile links
+\ihead{\ifthenelse{\value{chapter}>0}{\chaptername~\thechapter}{}}
 \chead[]{}                                      % Kopfzeile mitte
-\ohead[]{\rightmark}                            % Kopfzeile rechts
+% \ohead[]{\rightmark}                            % Kopfzeile rechts
+\ohead{\ifthenelse{\value{chapter}>0}{\headmark}{}}
 \ifoot[]{}                                      % Fußzeile links
 \cfoot*{\sffamily\pagemark}                     % Fußzeile mitte
 \ofoot[]{}                                      % Fußzeile rechts
