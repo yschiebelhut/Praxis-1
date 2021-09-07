@@ -14,9 +14,9 @@ Allerdings tritt an dieser Stelle sowohl das Problem auf, dass node-ui5 kaum dok
 Für das Node-Projekt wird zunächst die folgende package.json Datei (\autoref{code:basic-ms-package.json}) erstellt.
 Hier wird ein Projektname mit Versionsnummer und Kurzbeschreibung angelegt, sowie in Zeile 5 der Einstiegspunkt für die Applikation definiert.
 Die drei, in Zeile 6 folgende festgelegten, Projekt-Abhängigkeiten stellen hier allerdings den primär wichtigen Teil dar.
-Das \enquote{body-parser}-Paket wird dafür benötigt, um den Inhalt von Anfragen an den Server sauber verarbeiten zu können.
-Mit den hauseigenen Bibliotheken von Node.js ist zwar die Erstellung von Webservern bereits möglich, dieser Prozess wird jedoch vom \enquote{Express}-Framework stark vereinfacht.~\cite{express}
-Nicht zuletzt wird noch das \enquote{node-ui5}-Modul eingebunden.
+Das \emph{body-parser}-Paket wird dafür benötigt, um den Inhalt von Anfragen an den Server sauber verarbeiten zu können.
+Mit den hauseigenen Bibliotheken von Node.js ist zwar die Erstellung von Webservern bereits möglich, dieser Prozess wird jedoch vom \emph{Express}-Framework stark vereinfacht.~\cite{express}
+Nicht zuletzt wird noch das \emph{node-ui5}-Modul eingebunden.
 Mithilfe der hier definierten Abhängigkeiten, muss nun lediglich noch \emph{npm install} ausgeführt werden und die Implementierung des Mock Servers kann starten.
 \lstinputlisting[
 	label=code:basic-ms-package.json,
@@ -26,9 +26,9 @@ Mithilfe der hier definierten Abhängigkeiten, muss nun lediglich noch \emph{npm
 	lastline=10
 ]{Quellcode/basic-ms/package.json}
 
-Nachfolgend wir in \autoref{code:basic-ms-mockserver.js} der Quellcode der mockserver.js dargestellt.
+In \autoref{code:basic-ms-mockserver.js} wird der Quellcode der mockserver.js dargestellt.
 Beginnend muss node-ui5 eingebunden werden (Zeile 1).
-Dies geschieht hier unter Verwendung der mitgelieferten \enquote{factory}, die einige Konfigurationsschritte beim Einbinden direkt übernimmt.
+Dies geschieht hier unter Verwendung der mitgelieferten \emph{factory}, die einige Konfigurationsschritte beim Einbinden direkt übernimmt.
 Parameter, die sie dabei berücksichtigen soll, werden in den folgenden 3 Zeilen gesetzt, unter anderem die Variable \emph{myApp}, als Referenz auf das Verzeichnis, in dem die mockserver.js liegt.
 Nachdem node-ui5 in Node.js eingebunden wurde, wird nun der gesamte folgende Code als Callback-Funktion der Einbindung ausgeführt.
 So enthält Zeile 7 bereits SAPUI-Code, welcher weitere SAPUI-Module einbindet (hier MockServer), welche in Zeile 9 einer anschließend automatisch ausgeführten Funktion übergeben werden.
@@ -36,7 +36,7 @@ So enthält Zeile 7 bereits SAPUI-Code, welcher weitere SAPUI-Module einbindet (
 \paragraph{Konfiguration des Mock Servers}
 Ab Zeile 10 wird der eigentliche Mock Server initialisiert.
 Hierzu wird zunächst in der Variable \emph{ms} ein neues Mock Server Objekt erstellt, welches für den gesamten Subpfad von \enquote{/} zuständig ist.
-Zeile 14 folgende teilen dem Mock Server mit, wo er die Daten findet, die er simulieren soll (myApp/mockdata), wie diese strukturiert sind (myApp/metadata.xml) und ob automatisch Platzhalter für fehlende Daten generiert werden sollen.
+Zeile 14 folgende teilen dem Mock Server mit, wo er die Daten findet, die er simulieren soll (\emph{myApp/mockdata}), wie diese strukturiert sind (\emph{myApp/metadata.xml}) und ob automatisch Platzhalter für fehlende Daten generiert werden sollen.
 Zeile 19 bis 21 nehmen schließlich noch die Einstellung vor, dass der Mock Server automatisch antwortet und in diese Antwort eine künstliche Verzögerung einbaut, um die Simulation realistischer zu gestalten, bevor der Mock Server in Zeile 24 gestartet wird.~\cite{mock-srv-help}
 
 \paragraph{Externe Freigabe}
@@ -45,17 +45,13 @@ Zu diesem Zweck wird nun ab Zeile 26 noch ein zusätzlicher Webserver mithilfe d
 Zunächst werden hierzu die mit \ac{npm} installierten Module geladen und eine neue Express-Applikation initialisiert.
 Das zusätzlich installierte Modul für den body-parser wird nun als Standardparser für Anfragen an den Express-Server konfiguriert (Zeile 30 folgende).
 Anschließend wird eine Funktion festgelegt, die für jede Anfrage eines beliebigen Typs (GET, POST, PUT, ...) ausgeführt wird, die an den Express-Server geschickt werden (Zeile 35) und zwar sollen diese alle an den Mock Server weitergeleitet werden.
-Der Mock Server ist so implementiert, dass er automatisch alle \ac{AJAX}-Anfragen abfängt.
+Der Mock Server ist so implementiert, dass er automatisch alle \emph{\ac{AJAX}}-Anfragen abfängt.
 Somit kann direkt basierend auf den Daten und Parametern der ursprünglichen Anfrage eine solche erstellt werden (Zeile 36-40).
 Der \ac{AJAX}-Anfrage wird eine Callback-Funktion übergeben, die ausgeführt wird, wenn die Antwort des Mock Servers auf die Anfrage erfolgt ist.
 In dieser werden zunächst sämtliche Header-Daten aus der \ac{AJAX}-Antwort in die Antwort des Express-Servers auf die externe Anfrage kopiert.
 Letztere wird anschließend noch mit dem Status-Code der \ac{AJAX}-Response versehen und mit deren Text zurück an den externen Client geschickt (Zeile 41-51).
 Übrig bleibt nur noch das Starten des Express-Servers (Zeile 56).
-\lstinputlisting[
-	label=code:basic-ms-mockserver.js,
-	caption=Quellcode des Grundgerüsts (mockserver.js),
-	captionpos=b
-]{Quellcode/basic-ms/mockserver.js}
+
 
 \subsection{Function Imports}
 Zum aktuellen Zeitpunkt ist es bereits gelungen, einen lauffähigen \ac{OData}-Service zu errichten, welcher externe Anfragen beantwortet.
@@ -132,13 +128,6 @@ Im \emph{SAP Gateway Service Builder} ist nur ein weiterer Fehlertyp vorgesehen.
 Da der Roboter an dieser Stelle erwiesenermaßen existiert, liegt nun also der \emph{ROBOT\_STATUS\_NOT\_SET}-Fehler vor.
 Dieser Fehler wird ebenfalls zurückgegeben, falls der gewünschte Status länger als die maximal erlaubte Länge sein sollte und ebenfalls in sonstigen Fehlerfällen.
 
-\lstinputlisting[
-	label=code:set-robot-status-method,
-	caption=Node.js-Implementierung der Funktion SetRobotStatus,
-	captionpos=b,
-	firstline=1,
-	lastline=64
-]{Quellcode/setrobotstatus.js}
 
 Nun existiert zwar die Funktion, ihre Existenz ist dem Mock Server jedoch noch nicht bekannt.
 Um dies zu ändern, müssen zunächst die bekannten Request Handler des Mock Servers abgerufen werden.
@@ -146,6 +135,7 @@ Im Anschluss kann ihnen ein neuer Handler hinzugefügt werden, der per reguläre
 Abschließend müssen die modifizierten Request Handler noch erneut dem Mock Server bekannt gegeben werden (siehe \autoref{code:request-handler}).
 
 \lstinputlisting[
+	language=JavaScript,
 	label=code:request-handler,
 	caption=Hinzufügen des Request Handlers für die Funktion SetRobotStatus,
 	captionpos=b,
@@ -158,7 +148,7 @@ Abschließend müssen die modifizierten Request Handler noch erneut dem Mock Ser
 Die \ac{OData}-Schnittstelle des \ac{ewm-sim} ist dafür vorgesehen, innerhalb eines Netzwerks freigegeben zu werden.
 Im aktuellen Zustand wäre jeder Client in diesem Netzwerk in der Lage, nicht nur Daten von dieser Schnittstelle anzufragen, sondern diese dort auch zu manipulieren, wodurch der ordnungsgemäße Betrieb des \ac{ewm-sim} gestört werden kann.
 Aus diesem Grund ist es sinnvoll, eine Authentifizierung einzubauen, die den bislang offenen Zugriff beschränkt.
-Eine simple und verbreitete Methode hierfür ist \ac{HTTP}-Basisauthentifizierung, welche, wie der Name schon sagt, direkt in \ac{HTTP} integriert ist.
+Eine simple und verbreitete Methode hierfür ist \emph{\ac{HTTP}-Basisauthentifizierung}, welche, wie der Name schon sagt, direkt in \ac{HTTP} integriert ist.
 Um einen Express-Server mit dieser Art der Authentifizierung zu sichern, wird lediglich ein weiteres \ac{npm}-Modul benötigt -- \emph{express-basic-auth}.~\cite{auth-npm, auth-tutorial}
 Des Weiteren muss die \emph{mockserver.js} um den in \autoref{code:basic-auth} dargestellten Code erweitert werden.
 Zunächst wird hier das Modul in den Quellcode importiert (Zeile 1).
@@ -171,6 +161,7 @@ Diese nutzt die \emph{safeCompare}-Methode der importierten Bibliothek, welche b
 Stimmen beide Wertepaare überein, wird \emph{true} zurückgegeben; die Authentifizierung war erfolgreich.
 
 \lstinputlisting[
+	language=JavaScript,
 	label=code:basic-auth,
 	caption=Integration von \ac{HTTP}-Basisauthentifizierung in den Mock Server,
 	captionpos=b
@@ -196,23 +187,18 @@ In den Zeilen 5-7 werden für die Testdurchführung benötigte Bibliotheken gela
 Dies sind zum einen der Mock Server, eine weitere Bibliothek, die bei der Beschreibung der Testfälle benötigt wird, sowie eine aus dem ersten \ac{ewm-sim} übernommene Hilfsbibliothek, um einfach Anfragen an den Testserver schicken zu können.
 Anschließend folgen die eigentlichen Tests.
 Testfälle in Mocha sind entfernt dem Aufbau einer natürlichen Sprache nachempfunden.
-Somit wird ein Testset mit dem Schlüsselwort \emph{\enquote{describe}} (dt. \enquote{beschreibe}) und einer menschenlesbaren Kurzbeschreibung der nachfolgenden Tests eingeleitet (Zeile 9).
+Somit wird ein Testset mit dem Schlüsselwort \emph{describe} (dt. \enquote{beschreibe}) und einer menschenlesbaren Kurzbeschreibung der nachfolgenden Tests eingeleitet (Zeile 9).
 Da es für automatisierte Tests üblich ist, dass gewisse Schritte vor und nach der Ausführung eines bestimmten Testfalls durchgeführt werden müssen, bringt Mocha für solches eigene Funktionen (\emph{before} und \emph{after}) mit.
 Für den vorliegenden Test erfolgt in der \emph{before}-Funktion der Startvorgang des Mock Servers.
-Anschließend folgen die, durch das Schlüsselwort \emph{\enquote{it}} und eine genaue Beschreibung des zu prüfenden Falls gekennzeichneten atomaren Tests.
-Diese führen dann die zu testende Interaktion mit dem Server durch und vergleichen das erzielte Resultat (A) mittels der Funktion \emph{\enquote{assert.deepStrictEqual(A, B)}} mit dem erwarteten Resultat (B).
+Anschließend folgen die, durch das Schlüsselwort \emph{it} und eine genaue Beschreibung des zu prüfenden Falls gekennzeichneten atomaren Tests.
+Diese führen dann die zu testende Interaktion mit dem Server durch und vergleichen das erzielte Resultat (A) mittels der Funktion \emph{assert.deepStrictEqual(A, B)} mit dem erwarteten Resultat (B).
 Gleichen sich die Ergebnisse exakt, war der jeweilige Test erfolgreich.
 
-\lstinputlisting[
-	label=code:tests,
-	caption=Ausschnitt aus den Modultests,
-	captionpos=b
-]{Quellcode/tests.js}
 
 
 \section{Erstellung des Dockerimages}
 Nachdem der Node-Server vollständig erstellt ist und automatisiert getestet werden kann, besteht der nächste Schritt in der Einbindung in ein Dockerimage.
-Der Vorgang ist nur unwesentlich komplizierter als beim in \autoref{sec:einarbeitung} beschriebenen Hello-World-Docker.
+Der Vorgang ist nur unwesentlich komplizierter als beim in \autoref{sec:einarbeitung} beschriebenen Testcontainer.
 Als Besonderheit kommt hier allerdings dazu, dass das Zielimage möglichst klein sein soll.
 Aufgrund von Artefakten, die beim Generieren der Node-Module entstehen, muss hier auf ein Multi-Stage-Build zurückgegriffen werden.
 \Dash der Prozess der Erstellung des Dockerimages wird in mehrere Abschnitte aufgeteilt.
@@ -224,6 +210,7 @@ Dort werden die restlichen Projektdateien in das eigentliche Containerimage kopi
 Abschließend folgt noch die standardmäßige Freigabe des Ports \emph{8080} für den Webserver (dieser Port kann auch später noch über die Kommandozeile zur Laufzeit angepasst werden) und die Festlegung der Server-Kommandozeile, welche beim Dockerstart ausgeführt werden soll, um auch den Server hochzufahren.~\cite{docker-multistage}
 
 \lstinputlisting[
+	language=Docker,
 	label=code:Dockerfile-ewm-sim,
 	caption=Dockerfile für den \ac{ewm-sim},
 	captionpos=b
@@ -239,13 +226,13 @@ Hierbei erteilt man dem Dienst Zugriffsberechtigungen für die dem Account zugeh
 Anschließend wird einem von Travis CI eine Liste der auf dem Account gefundenen Repositories angezeigt, in der man mit nur einem weiteren Klick die automatische Verarbeitung für ausgewählte Repositories aktivieren kann.
 
 Als weiterer Schritt muss Travis CI nun noch eine Konfiguration erhalten, wie die Tests für das registrierte Repository durchzuführen sind.
-Diese Konfiguration erfolgt mittels der Datei \emph{\enquote{.travis.yml}}, welche im Projektwurzelverzeichnis angelegt wird.
+Diese Konfiguration erfolgt mittels der Datei \emph{.travis.yml}, welche im Projektwurzelverzeichnis angelegt wird.
 In \autoref{code:travis.yml} ist die Konfigurationsdatei für den \ac{ewm-sim} zu sehen.
 Hier wird zunächst festgelegt, in welcher Programmiersprache das Projekt geschrieben wurde und welche Version der Sprache zu verwenden ist (Zeilen 1-3).
 Die \emph{install}-Sektion in Zeile 4 definiert, welche Kommandos zur Vorbereitung der Testumgebung ausgeführt werden müssen.
 Im konkreten Fall müssen beispielsweise die Abhängigkeiten des Node-Servers installiert werden (Zeile 5).
 Es können auch weitere Hook festgelegt werden, so zum Beispiel der in Zeile 6 aufgeführte \emph{after\_success}-Hook, der nach einer erfolgreichen Ausführung der Tests angewandt wird.
-Hier wird nach den Tests noch die \enquote{Coverage} (dt. Abdeckung) bestimmt (Zeile 7).
+Hier wird nach den Tests noch die \emph{Coverage} (dt. \enquote{Abdeckung}) bestimmt (Zeile 7).
 Diese gibt an, wie groß der Anteil des Quellcodes ist, welcher von den Tests abgedeckt wird.
 Eine geringe Coverage kann somit darauf hindeuten, dass nicht ausreichend Testfälle definiert wurden, um das korrekte Verhalten der Applikation zu verifizieren.
 Ebenfalls in der Konfigurationsdatei festgelegt werden Benachrichtigungen (Zeile 8 fort folgende).

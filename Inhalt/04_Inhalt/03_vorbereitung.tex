@@ -22,8 +22,8 @@ Diese erhält als Parameter eine Request und eine Response.
 In den folgenden Zeilen wird zunächst der Statuscode und Inhaltstyp der Response gesetzt und anschließend in Zeile 9 noch ihr Text -- \enquote{Hello, world!} -- festgelegt.
 Mit dem Methodenaufruf in Zeile 12 wird der Server gestartet.
 \lstinputlisting[
+	language=JavaScript,
 	label=code:hello-world.js,
-	% language=JavaScript,
 	caption=Testserver in Node.js,
 	captionpos=b
 ]{Quellcode/hello-world.js}
@@ -49,6 +49,7 @@ Da die Applikation nun in einem Container laufen wird und diese grundsätzlich u
 Abschließend bleibt nur noch festzulegen, wie der Node-Server gestartet werden kann, was in der siebten Zeile erfolgt.
 Durch das \emph{CMD}-Schlüsselwort, welches ein Array an Strings entgegennimmt, wird das benötigte Startkommando hinterlegt, welches beim Start des Containers auf dessen Linux-Kommandozeile ausgeführt wird.
 \lstinputlisting[
+	language=Docker,
 	label=code:hello-world-docker,
 	caption=Integration des Testservers in einen Dockercontainer,
 	captionpos=b
@@ -91,7 +92,7 @@ Weiterhin spielen für den \ac{ewm-sim} sogenannte Function Imports eine entsche
 Der Kern der \ac{OData}-Spezifikation umfasst in erster Linie den Abruf sowie die Aktualisierung einzelner Datensätze (Entities) welche wiederum Teil sogenannter Entitysets sind.
 Diese Entitysets können ebenfalls angesprochen, gefiltert und hinsichtlich bestimmter Eigenschaften selektiert werden.
 Function Imports bieten nun die Möglichkeit, darüber hinaus spezialisierte Anfragen an den Server zu schicken.
-So existiert exemplarisch im \ac{ewm-sim} eine Funktion \enquote{GetNewRobotWarehouseOrder}, mittels derer sich ein Roboter eine neue \ac{who} zuweisen lassen kann.
+So existiert exemplarisch im \ac{ewm-sim} eine Funktion \emph{GetNewRobotWarehouseOrder}, mittels derer sich ein Roboter eine neue \emph{\ac{who}} zuweisen lassen kann.
 Auf Function Imports kann in einer Simulation keinesfalls verzichtet werden, da diese, wie am obigen Beispiel anschaulich zu erkennen, für essenzielle Funktionen benötigt werden.
 Die verfügbaren Module mussten somit zunächst noch alle auf die Möglichkeit untersucht werden, ob sie die Einrichtung von angepassten Function Imports unterstützen.
 

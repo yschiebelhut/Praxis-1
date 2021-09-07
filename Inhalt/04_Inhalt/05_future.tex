@@ -2,24 +2,16 @@
 Nach Fertigstellung der Neuauflage des \ac{ewm-sim} stellen sich nun natürlich die Fragen: \enquote{Ist es gelungen, den \ac{ewm-sim} im Vergleich zur Vorgängerversion wesentlich zu verbessern? Wenn ja, wie groß ist der Vorsprung?} und \enquote{Wie geht es mit den Ergebnissen weiter? Was kann noch verbessert werden?}.
 
 \section{Locust}
-Die einfachste Methode, um die Performance eines Webservices zu bewerten, ist ein sogenannter Load Test.
+Die einfachste Methode, um die Performance eines Webservices zu bewerten, ist ein sogenannter \emph{Load Test}.
 Hierbei wird eine hohe Last in Form von Anfragen an den Service angelegt und währenddessen unter anderem protokolliert, wie lange dieser zur Beantwortung der Anfragen braucht und wie viele Anfragen dabei verloren gehen.
 Locust ist eine Python-Bibliothek, um solche Tests ohne großen Aufwand durchführen zu können.~\cite{locust, locust-doc}
 Man muss diese hierfür lediglich installieren und in einer kleinen Datei die möglichen Tests beschreiben, die durchgeführt werden sollen.
 Zum Vergleich der beiden Service-Implementierungen wurde die in \autoref{code:locustfile.py} dargestellte Locustdatei angelegt.
-Die möglichen Anfragen an den Server werden als Methoden der Klasse \enquote{ODataUser} implementiert.
-Eine Methode wird durch die Annotation \emph{\enquote{@task(x)}} als Test gekennzeichnet.
-Über \enquote{x} kann hierbei eine Wahrscheinlichkeit angegeben werden, mit der diese Aktion von einem simulierten User ausgeführt wird.
+Die möglichen Anfragen an den Server werden als Methoden der Klasse \emph{ODataUser} implementiert.
+Eine Methode wird durch die Annotation \emph{@task(x)} als Test gekennzeichnet.
+Über \emph{x} kann hierbei eine Wahrscheinlichkeit angegeben werden, mit der diese Aktion von einem simulierten User ausgeführt wird.
 Um die Performance des \ac{ewm-sim} zu testen, werden verschiedene Typen von Anfragen simuliert -- etwa Anzeigen aller Roboter, Erstellen eines neuen Roboters, Löschen eines Roboters oder Anzeigen aller \ac{who}s.
 
-\lstinputlisting[
-	language=Python,
-	label=code:locustfile.py,
-	caption=Testbeschreibung für Locust,
-	captionpos=b,
-	breaklines=true,
-	columns=fullflexible
-]{Quellcode/locustfile.py}
 
 Anschließend kann Locust per Aufruf in der Kommandozeile gestartet werden.
 Dies stellt ein kleines Webinterface auf dem lokalen Host zur Verfügung, über welches unter anderem die Anzahl der zu simulierenden Nutzer eingestellt und der eigentliche Load Test gestartet werden kann.

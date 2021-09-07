@@ -124,12 +124,36 @@
 \setlength {\marginparwidth }{2cm}      % Abstand für Todo Notizen
 
 \lstdefinelanguage{JavaScript}{
-  keywords={break, case, catch, continue, debugger, default, delete, do, else, finally, for, function, if, in, instanceof, new, return, switch, this, throw, try, typeof, var, void, while, with},
+  morekeywords=[1]{break, case, catch, continue, debugger, default, delete, do, else, finally, for, function, if, in, instanceof, new, return, switch, this, throw, try, typeof, var, void, while, with, require, then, const},
   morecomment=[l]{//},
   morecomment=[s]{/*}{*/},
-  morestring=[b]',
-  morestring=[b]",
+  morestring=[b]{'},
+  morestring=[b]{"},
+  morestring=[b]{`},
+  stringstyle=\color[rgb]{0.3,0.5,0.4},
   sensitive=true
+}
+
+\lstdefinelanguage{Docker}{
+	% Keywords as defined in the language grammar
+	morekeywords=[1]{%
+	  FROM,RUN,COPY,WORKDIR,LABEL,USER,ENTRYPOINT,EXPOSE,CMD},
+	% Built-in functions
+	morekeywords=[2]{},
+	% Pre-declared types
+	morekeywords=[3]{},
+	% Constants and zero value
+	morekeywords=[4]{},
+	% Strings : "foo", 'bar', `baz`
+	morestring=[b]{"},
+	morestring=[b]{'},
+	morestring=[b]{`},
+	% Comments : /* cpmment */ and // comment
+	comment=[l]{\#},
+	morecomment=[s]{/*}{*/},
+	stringstyle=\color[rgb]{0.3,0.5,0.4},
+	% Options
+	sensitive=true
 }
 
 \usepackage{xurl}
