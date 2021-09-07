@@ -15,7 +15,7 @@ Kennzeichnend für das Konzept von Docker sind die sogenannten Container.
 Diese stellen eine vollständige Zusammenstellung aller Komponenten dar, die eine bestimmte Anwendung zur Ausführung benötigt.
 Dadurch ist es sehr einfach, eine Applikation schnell und einheitlich auf einem neuen System zu deployen und dabei direkt alle Abhängigkeiten mitzuinstallieren und richtig zu konfigurieren.~\cite{whatisacontainer}
 
-Docker bietet außerdem eine \enquote{Docker Hub} genannte Plattform an.
+Docker bietet außerdem eine \emph{Docker Hub} genannte Plattform an.
 Sie bietet eine Möglichkeit, eigene Container Images (also Systemabbilder/Bauanleitungen für eine bestimmte Container-Umgebung) hochzuladen, sowie die von anderen Nutzern hochgeladenen Images zu nutzen.
 Diese können zum Beispiel mit einem einzigen Kommandozeilenbefehl heruntergeladen und deployed werden. Sogar als Basis für neue, eigene Images können Images von Docker Hub verwendet werden.~\cite{dockerhub}
 
@@ -50,13 +50,13 @@ Da die neue Version des \ac{ewm-sim} erneut als Docker erstellt werden soll, sol
 Seit ihrer ursprünglichen Einführung im Jahre 1995 hat die interpretierte Skriptsprache \emph{JavaScript} rasch an Beliebtheit und Bedeutung gewonnen.
 Heutzutage ist sie aus der Web-Entwicklung nicht mehr wegzudenken.
 Node.js stellt eine Möglichkeit dar, mithilfe derer JavaScript nicht mehr nur clientseitig im Browser, sondern auch serverseitig ausgeführt werden kann.
-Ein großer Vorteil davon liegt darin, dass Web-Entwickler, die bereits viel mit JavaScript arbeiten und dementsprechend damit vertraut sind, nur noch eine Sprache benötigen, um sowohl Frontend als auch Backend zu entwickeln.
+Ein Vorteil davon liegt darin, dass Web-Entwickler, die bereits viel mit JavaScript arbeiten und dementsprechend damit vertraut sind, nur noch eine Sprache benötigen, um sowohl Frontend als auch Backend zu entwickeln.
 Zudem ermöglicht Node.js die parallelisierte Ausführung von Code.
 Dies bedeutet, dass ein Web-Server nicht wie traditionell üblich eine Schlange von Anfragen bilden und diese nacheinander beantworten muss, sondern er die Anfragen stattdessen gleichzeitig beantworten kann.
 
 \paragraph{\ac{npm}}
-Eine weitere nützliche Funktionalität von Node.js ist der \acl{npm}.
-Mit ihm können sehr einfach von der Community erstellte Bibliotheken installiert und in ein Programm eingebunden werden.
+Eine weitere Funktionalität von Node.js ist der \acl{npm}.
+Mit ihm können von der Community erstellte Bibliotheken installiert und in ein Programm eingebunden werden.
 Auf diese Weise stehen beispielsweise fertige Frameworks für Web-Server, Unit-Tests oder Logger  mit erweiterter Funktionalität zur Verfügung.
 \ac{npm} hilft außerdem bei der strukturierten Verwaltung eines Node.js Projektes.
 Er stellt einen Assistenten bereit, um automatisiert eine sogenannte \emph{package.json} zu generieren und auf das Projekt anzupassen.
@@ -75,10 +75,10 @@ Möchte jemand anders das Projekt weiterentwickeln oder ein Deployment durchfüh
 Des Weiteren können in der package.json auch Skripte festgelegt werden, die ein einfaches Ausführen, Testen oder Bauen des Projektes, sowie ähnliche Aufgaben ermöglichen.~\cite{package.json}
 
 Die Wahl der zu verwendenden Programmiersprache fiel aus verschiedenen Gründen auf Node.js.
-Zunächst muss betrachtet werden, dass die simple Skriptsprache Node.js genau für den Einsatzzweck der serverseitigen Entwicklung konzeptioniert wurde.
+Zunächst muss betrachtet werden, dass die Skriptsprache Node.js genau für den Einsatzzweck der serverseitigen Entwicklung konzeptioniert wurde.
 Weiterhin ist der SAPUI5 Mock Server selbst in JavaScript geschrieben.
 Mithilfe von einigen bereits existierenden \ac{npm}-Modulen ist somit eine sehr einfache Integration mit den bereits vorhandenen Softwarekomponenten möglich.
-Auf Docker Hub existiert außerdem eine breite Auswahl an vorgefertigten Images für Node.js-Umgebungen, sodass kein eigenständiges Containerimage von Grund auf hochgezogen werden muss.
+Auf Docker Hub existiert außerdem eine Auswahl an vorgefertigten Images für Node.js-Umgebungen, sodass kein eigenständiges Containerimage von Grund auf hochgezogen werden muss.
 
 
 \section{Postman}
@@ -108,7 +108,7 @@ Die Zustände des Quellcodes werden zum Zeitpunkt des jeweiligen Commits gespeic
 So können neu hinzugekommene Fehler einfach mittels Rollbacks behoben werden.~\cite{dudler}
 
 \paragraph{GitHub}
-Eine große Stärke von Git ist die Möglichkeit zur einfachen Kollaboration.
+Eine Stärke von Git ist die Möglichkeit zur einfachen Kollaboration.
 Hierfür muss ein Repository auf einem Server liegen, von dem aktuelle Änderungen auf den lokalen Rechner heruntergeladen (pull) oder veröffentlicht werden können (push).
 GitHub ist einer der größten Anbieter für das Hosting von Git-Repositories und bietet auf der Website noch zahlreiche weitere Möglichkeiten zum Management und der Dokumentation von Projekten.
 Hierzu gehören zum Beispiel ein in das Projekt integriertes Wiki, ein Tracker für Probleme (Issues), Statistiken zum Projekt und \emph{Pull Requests} -- ein Feature um Änderungen am Code anderer vorzuschlagen, auf den keine direkten Schreibrechte existieren.~\cite{github.doc}
@@ -124,9 +124,7 @@ Der Dienst wird automatisch aktiv, wenn beispielsweise neuer Code auf einem GitH
 Die Resultate der Tests können dann entweder auf der Website von Travis CI eingesehen werden oder auch als automatisch generierte Badge im Readme des GitHub-Repositorys oder auf der Projektwebsite eingebunden werden.
 Des Weiteren kann eine Benachrichtigung per E-Mail konfiguriert werden, sodass der für das Projekt verantwortliche direkte Rückmeldung darüber erhält, wenn etwas nach einem Update nicht mehr funktionsfähig sein sollte.~\cite{travis}
 
-Travis CI ist eine gute und beliebte Möglichkeit, die Integrität des eigenen Codes zu garantieren.
-Allein deshalb schon sollte sie bei diesem Projekt zum Einsatz kommen.
-Ein weiterer Vorteil genau dieser Testsuite ist, dass sie bereits für \ac{EWM} Cloud Robotics verwendet wird und somit die Tests des neu entstehenden \ac{ewm-sim}s direkt in das vorhandene Repository eingebunden werden können.
+Ein Vorteil genau dieser Testsuite ist, dass sie bereits verwendet wird, um die Integrität des Quellcodes von \ac{EWM} Cloud Robotics zu garantieren und somit die Tests des neu entstehenden \ac{ewm-sim} direkt in das vorhandene Repository eingebunden werden können.
 
 \section{Jira}
 Die Abteilung in der \ac{EWM} Cloud Robotics entwickelt wird, arbeitet nach der agilen Projektmanagement-Methodik \emph{Scrum}.
