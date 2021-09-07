@@ -7,38 +7,30 @@ Aus diesem Grund kommt schon dem Schritt der Vorbereitung besondere Bedeutung zu
 
 \section{Einarbeitung in und Installation der Basiskomponenten}
 \label{sec:einarbeitung}
-Um sich in der Softwareentwicklung mit neuen Technologien vertraut zu machen und die lokale Installation der Entwicklungsumgebung flüchtig auf korrekte Funktion zu überprüfen, empfiehlt sich in der Regel immer ein sogenanntes \enquote{Hello-World-Projekt}.
-Node.js und Docker stellen in dieser Hinsicht keine Ausnahmen dar und bieten beide eigenständige, geführte Einleitungen an, die den Einsteiger von der Installation bis zu den ersten sichtbaren Lebenszeichen begleiten.
+Node.js und Docker bieten beide eigenständige, geführte Einleitungen an, die den Einsteiger von der Installation bis zu den ersten sichtbaren Lebenszeichen begleiten.
+Im Folgenden wird der Aufbau eines kleinen Testprojektes durchlaufen, um an diesem Beispiel die Verwendung der jeweiligen Technologien in Grundzügen zu erläutern.
 Beide Tools werden auch gerne in Kombination miteinander eingesetzt.
-Dadurch existieren praktischerweise sogar (ebenfalls von beiden Seiten aus) Anleitungen, wie ein Hello-World-Node.js-Server in einen Docker verpackt werden kann.~\cite{docker-node-hello}
+Dadurch existieren praktischerweise sogar (ebenfalls von beiden Seiten aus) grundlegende Anleitungen, wie eine Node.js-Applikation in einen Docker verpackt werden kann.~\cite{docker-node-hello}
 
 \paragraph{Node.js}
-Für Node.js existieren streng genommen verschieden Ansätze für ein Hello World.
-Der einfachste bestünde darin, die Grußbotschaft auf der Konsole auszugeben.
-Da Node.js jedoch primär für den Einsatz als Webserver vorgesehen und die Erstellung eines Webservices auch Ziel dieser Praxisphase ist, wird hier auch das Hello World als Antwort auf eine \ac{HTTP}-Request implementiert (\autoref{code:hello-world.js}).
+Da Node.js primär für den Einsatz als Webserver vorgesehen und die Erstellung eines Webservices auch Ziel dieser Praxisphase ist, wird hier auch das Testprojekt als Antwort auf eine \ac{HTTP}-Request implementiert (\autoref{code:hello-world.js}).
 Hierzu wird zunächst in der ersten Zeile das entsprechende \ac{HTTP}-Modul aus der Standardbibliothek von Node.js geladen.
-Anschließend werden Hostname und Port gesetzt, unter denen der Service erreichbar sein wird.
-Als Hostname wird hier \emph{127.0.0.1} in Verbindung mit Port 3000 gewählt.
-Die angegebene \ac{IP}-Adresse steht für den lokalen Rechner.
-Üblicherweise würde für einen \ac{HTTP}-Webservice zum Beispiel der Port 80 gewählt werden.
-Dies bringt jedoch den Nachteil mit sich, dass die Anwendung in diesem Falle nur mit Administratorrechten ausgeführt werden kann, weshalb häufig auf alternative Ports zurückgegriffen wird.
+Anschließend wird der Port gesetzt, unter dem der Service erreichbar sein wird (hier Port 3000).
 Als Nächstes wird in Zeile 6 folgende der Server initialisiert.
 Mit dem hier vorliegenden Aufruf der Methode \emph{createServer} wird ein Server erstellt, der beim Aufruf jedes Pfades die nachfolgende Callback-Funktion ausführt.
-Diese erhält als Parameter eine Request (eingehende Daten vom anfragenden Client) und eine Response (Antwort, die der Server an den Client zurücksendet).
-In den folgenden Zeilen wird zunächst der Statuscode und Inhaltstyp (hier der Einfachheit halber Klartext) der Response gesetzt und anschließend in Zeile 9 noch ihr Text -- \enquote{Hello, world!} -- festgelegt.
-Mit dem Methodenaufruf in Zeile 12 wird der Server nun gestartet.
-Abschließend wird noch in Zeile 13 die Statusmeldung geloggt, dass der Server erfolgreich gestartet wurde und nun unter der Adresse \emph{http://127.0.0.1:3000/} zu erreichen ist.
-(Die Festlegung des Inhalts dieser Statusmeldung erfolgt dynamisch und passt sich den in Zeile 3 und 4 getroffenen Einstellungen an.)
+Diese erhält als Parameter eine Request und eine Response.
+In den folgenden Zeilen wird zunächst der Statuscode und Inhaltstyp der Response gesetzt und anschließend in Zeile 9 noch ihr Text -- \enquote{Hello, world!} -- festgelegt.
+Mit dem Methodenaufruf in Zeile 12 wird der Server gestartet.
 \lstinputlisting[
 	label=code:hello-world.js,
 	% language=JavaScript,
-	caption=Hello-World-Server in Node.js,
+	caption=Testserver in Node.js,
 	captionpos=b
 ]{Quellcode/hello-world.js}
 
 
 \paragraph{Docker}
-Nun gilt es, die eben erstellte Hello-World-Applikation in einen Dockercontainer einzubauen.
+Nun gilt es, den eben erstellten Server in einen Dockercontainer einzubauen.
 Docker werden mithilfe eines sogenannten \emph{Dockerfile}s generiert, welches hier exemplarisch dargestellt ist (\autoref{code:hello-world-docker}).
 Auf Docker Hub stehen bereits dutzende Images für den Einsatz als Node.js-Server bereit.~\cite{dockerhub-node}
 In der ersten Zeile des Dockerfiles wird mit dem Schlüsselwort \emph{FROM} das Image referenziert, das dem neu Entstehenden als Fundament dienen soll.
@@ -58,7 +50,7 @@ Abschließend bleibt nur noch festzulegen, wie der Node-Server gestartet werden 
 Durch das \emph{CMD}-Schlüsselwort, welches ein Array an Strings entgegennimmt, wird das benötigte Startkommando hinterlegt, welches beim Start des Containers auf dessen Linux-Kommandozeile ausgeführt wird.
 \lstinputlisting[
 	label=code:hello-world-docker,
-	caption=Integration des Hello-World-Servers in einen Dockercontainer,
+	caption=Integration des Testservers in einen Dockercontainer,
 	captionpos=b
 ]{Quellcode/hello-world-Dockerfile}
 
@@ -83,7 +75,7 @@ Zum einen bestünde grundsätzlich die Möglichkeit, von Grund auf einen neuen S
 Auf diese Weise wären der Entwicklung die größtmöglichen Freiheiten eingeräumt, sie brächte allerdings auf der anderen Seite auch eine Reihe von potenziellen Problemen und vermeidbaren Fehlern mit sich, da der \ac{OData} Standard relativ umfangreich ist.
 Hinzu kommt, dass die Erfahrung in dieser ersten Praxisphase noch stark eingeschränkt war, weshalb dies wahrscheinlich zu einer Überforderung geführt hätte, das Projekt vermutlich nicht in der gesteckten Zeit von zwei Monaten vollständig umsetzbar gewesen wäre und sich somit insgesamt ein alternativer Ansatz empfiehlt.
 
-Diese zweite Möglichkeit besteht in vorgefertigten Modulen, die sich speziell der Aufgabe widmen, eine einfache \ac{OData}-Schnittstelle nachzubilden.
+Diese zweite Möglichkeit besteht in vorgefertigten Modulen, die sich speziell der Aufgabe widmen, eine einfache \ac{OData}-Schnittstelle nachzubilden\footnote{Einige Beispiele sind direkt auf der OData-Website gelistet unter \url{https://www.odata.org/libraries/}.}.
 Einige dieser Module finden sich beispielsweise in den \ac{npm}-Repositories, wobei sie je nach Variante einen stark variierenden Funktionsumfang bieten.
 Da \ac{OData} ein klar definierter Standard ist, waren die Kernfunktionalitäten dieser Module sehr ähnlich aufgebaut.
 Unterschieden haben sie sich vor allem Hinsichtlich der Speicherung der abrufbaren und empfangenen Daten.
