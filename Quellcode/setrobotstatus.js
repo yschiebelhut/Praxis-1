@@ -3,7 +3,7 @@ var SetRobotStatus = function (oXhr, sUrlParams) {
 	logger.debug("sUrlParams: " + sUrlParams)
 	var oUrlParams = sUrlParams.split("&").reduce(function (prev, curr, i, arr) {
 		var p = curr.split("=")
-		prev[decodeURIComponent(p[0])] = decodeURIComponent(p[1]).replace(/\'/g, '')
+		prev[decodeURIComponent(p[0])] = decodeURIComponent(p[1]).replace(/\`'`/g, '')
 		return prev
 	}, {})
 	logger.debug("oUrlParams: " + JSON.stringify(oUrlParams))
